@@ -26,7 +26,6 @@ package com.team980.practice2019;
 
 import com.ctre.phoenix.motorcontrol.can.WPI_TalonSRX;
 import com.ctre.phoenix.motorcontrol.can.WPI_VictorSPX;
-import com.ctre.phoenix.sensors.PigeonIMU;
 import edu.wpi.first.wpilibj.*;
 import edu.wpi.first.wpilibj.drive.DifferentialDrive;
 
@@ -58,13 +57,13 @@ public class Robot extends TimedRobot {
      */
     @Override
     public void robotInit() {
-        WPI_TalonSRX leftTopMotor = new WPI_TalonSRX(Parameters.LEFT_TOP_DRIVE_CONTROLLER_CAN_ID);
+        WPI_TalonSRX leftTopMotor = new WPI_TalonSRX(LEFT_TOP_DRIVE_CONTROLLER_CAN_ID);
         leftTopMotor.setInverted(true);
-        SpeedControllerGroup leftDrive = new SpeedControllerGroup(leftTopMotor, new WPI_VictorSPX(LEFT_BACK_DRIVE_CONTROLLER_CAN_ID));
+        SpeedControllerGroup leftDrive = new SpeedControllerGroup(leftTopMotor, new WPI_TalonSRX(LEFT_BACK_DRIVE_CONTROLLER_CAN_ID));
 
-        WPI_TalonSRX rightTopMotor = new WPI_TalonSRX(Parameters.RIGHT_TOP_DRIVE_CONTROLLER_CAN_ID);
+        WPI_TalonSRX rightTopMotor = new WPI_TalonSRX(RIGHT_TOP_DRIVE_CONTROLLER_CAN_ID);
         rightTopMotor.setInverted(true);
-        SpeedControllerGroup rightDrive = new SpeedControllerGroup(rightTopMotor, new WPI_VictorSPX(RIGHT_BACK_DRIVE_CONTROLLER_CAN_ID));
+        SpeedControllerGroup rightDrive = new SpeedControllerGroup(rightTopMotor, new WPI_TalonSRX(RIGHT_BACK_DRIVE_CONTROLLER_CAN_ID));
 
         robotDrive = new DifferentialDrive(leftDrive, rightDrive);
 

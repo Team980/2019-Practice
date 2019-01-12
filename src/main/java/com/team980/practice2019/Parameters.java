@@ -31,10 +31,10 @@ package com.team980.practice2019;
 public final class Parameters {
 
     // DRIVE SYSTEM
-    public static final int LEFT_TOP_DRIVE_CONTROLLER_CAN_ID = 0;
-    public static final int LEFT_BACK_DRIVE_CONTROLLER_CAN_ID = 1;
-    public static final int RIGHT_TOP_DRIVE_CONTROLLER_CAN_ID = 2;
-    public static final int RIGHT_BACK_DRIVE_CONTROLLER_CAN_ID = 3;
+    public static final int LEFT_TOP_DRIVE_CONTROLLER_CAN_ID = 3;
+    public static final int LEFT_BACK_DRIVE_CONTROLLER_CAN_ID = 2;
+    public static final int RIGHT_TOP_DRIVE_CONTROLLER_CAN_ID = 0;
+    public static final int RIGHT_BACK_DRIVE_CONTROLLER_CAN_ID = 1;
 
     // ENCODERS
     public static final int LEFT_DRIVE_ENCODER_CHANNEL_A = 1;
