@@ -25,7 +25,7 @@
 package com.team980.practice2019;
 
 import com.ctre.phoenix.motorcontrol.can.WPI_TalonSRX;
-import com.ctre.phoenix.motorcontrol.can.WPI_VictorSPX;
+import edu.wpi.first.networktables.NetworkTable;
 import edu.wpi.first.wpilibj.*;
 import edu.wpi.first.wpilibj.drive.DifferentialDrive;
 
@@ -37,16 +37,18 @@ import static com.team980.practice2019.Parameters.*;
  */
 public class Robot extends TimedRobot {
 
+    private NetworkTable table;
+
     private DifferentialDrive robotDrive;
 
     private Joystick driveStick;
     private Joystick driveWheel;
     //private XboxController xboxController;
 
-    /*private Encoder leftDriveEncoder;
+    private Encoder leftDriveEncoder;
     private Encoder rightDriveEncoder;
 
-    private PigeonIMU imu;
+    /*private PigeonIMU imu;
     private double[] ypr; //Stores yaw/pitch/roll from IMU
 
     private Solenoid shifterSolenoid;*/
@@ -66,17 +68,21 @@ public class Robot extends TimedRobot {
         SpeedControllerGroup rightDrive = new SpeedControllerGroup(rightTopMotor, new WPI_TalonSRX(RIGHT_BACK_DRIVE_CONTROLLER_CAN_ID));
 
         robotDrive = new DifferentialDrive(leftDrive, rightDrive);
+        robotDrive.setName("Robot Drive");
 
         driveStick = new Joystick(DRIVE_STICK_ID);
         driveWheel = new Joystick(DRIVE_WHEEL_ID);
         //xboxController = new XboxController(XBOX_CONTROLLER_ID);
 
-        /*leftDriveEncoder = new Encoder(LEFT_DRIVE_ENCODER_CHANNEL_A, LEFT_DRIVE_ENCODER_CHANNEL_B,
-                INVERT_LEFT_DRIVE_ENCODER, CounterBase.EncodingType.k4X);
-        rightDriveEncoder = new Encoder(RIGHT_DRIVE_ENCODER_CHANNEL_A, RIGHT_DRIVE_ENCODER_CHANNEL_B,
-                INVERT_RIGHT_DRIVE_ENCODER, CounterBase.EncodingType.k4X);
+        leftDriveEncoder = new Encoder(LEFT_DRIVE_ENCODER_CHANNEL_A, LEFT_DRIVE_ENCODER_CHANNEL_B, INVERT_LEFT_DRIVE_ENCODER, CounterBase.EncodingType.k4X);
+        leftDriveEncoder.setDistancePerPulse((TAU * (WHEEL_RADIUS / 12)) / DRIVE_ENCODER_PULSES_PER_REVOLUTION);
+        leftDriveEncoder.setName("Drive Encoders", "Left");
 
-        imu = new PigeonIMU(IMU_CAN_ID);
+        rightDriveEncoder = new Encoder(RIGHT_DRIVE_ENCODER_CHANNEL_A, RIGHT_DRIVE_ENCODER_CHANNEL_B, INVERT_RIGHT_DRIVE_ENCODER, CounterBase.EncodingType.k4X);
+        rightDriveEncoder.setDistancePerPulse((TAU * (WHEEL_RADIUS / 12)) / DRIVE_ENCODER_PULSES_PER_REVOLUTION);
+        rightDriveEncoder.setName("Drive Encoders", "Right");
+
+        /*imu = new PigeonIMU(IMU_CAN_ID);
         ypr = new double[3];
 
         shifterSolenoid = new Solenoid(PCM_CAN_ID, SHIFTER_SOLENOID_PCM_CHANNEL);*/
