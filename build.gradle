@@ -28,7 +28,7 @@ plugins {
     id "java"
     id "idea"
     id "eclipse"
-    id "edu.wpi.first.GradleRIO" version "2019.1.1"
+    id "edu.wpi.first.GradleRIO" version "2019.2.1"
 }
 
 def MAIN_CLASS = "com.team980.practice2019.Main"
