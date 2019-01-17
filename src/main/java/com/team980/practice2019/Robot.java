@@ -43,15 +43,15 @@ public class Robot extends TimedRobot {
 
     private Joystick driveStick;
     private Joystick driveWheel;
-    //private XboxController xboxController;
+    private XboxController xboxController;
 
     private Encoder leftDriveEncoder;
     private Encoder rightDriveEncoder;
 
     /*private PigeonIMU imu;
-    private double[] ypr; //Stores yaw/pitch/roll from IMU
+    private double[] ypr;*/ //Stores yaw/pitch/roll from IMU
 
-    private Solenoid shifterSolenoid;*/
+    private Solenoid shifterSolenoid;
 
     /**
      * Robot-wide initialization code goes here.
@@ -72,7 +72,7 @@ public class Robot extends TimedRobot {
 
         driveStick = new Joystick(DRIVE_STICK_ID);
         driveWheel = new Joystick(DRIVE_WHEEL_ID);
-        //xboxController = new XboxController(XBOX_CONTROLLER_ID);
+        xboxController = new XboxController(XBOX_CONTROLLER_ID);
 
         leftDriveEncoder = new Encoder(LEFT_DRIVE_ENCODER_CHANNEL_A, LEFT_DRIVE_ENCODER_CHANNEL_B, INVERT_LEFT_DRIVE_ENCODER, CounterBase.EncodingType.k4X);
         leftDriveEncoder.setDistancePerPulse((TAU * (WHEEL_RADIUS / 12)) / DRIVE_ENCODER_PULSES_PER_REVOLUTION);
@@ -83,9 +83,10 @@ public class Robot extends TimedRobot {
         rightDriveEncoder.setName("Drive Encoders", "Right");
 
         /*imu = new PigeonIMU(IMU_CAN_ID);
-        ypr = new double[3];
+        ypr = new double[3];*/
 
-        shifterSolenoid = new Solenoid(PCM_CAN_ID, SHIFTER_SOLENOID_PCM_CHANNEL);*/
+        shifterSolenoid = new Solenoid(PCM_CAN_ID, SHIFTER_SOLENOID_PCM_CHANNEL);
+        shifterSolenoid.setName("Pneumatics", "Shifter Solenoid");
     }
 
     /**
@@ -101,12 +102,12 @@ public class Robot extends TimedRobot {
      */
     @Override
     public void autonomousInit() {
-        /*shifterSolenoid.set(true); //low
+        shifterSolenoid.set(true); //low
 
         leftDriveEncoder.reset();
         rightDriveEncoder.reset();
 
-        imu.setYaw(0, 0);*/
+        //imu.setYaw(0, 0);
     }
 
     /**
@@ -126,7 +127,7 @@ public class Robot extends TimedRobot {
      */
     @Override
     public void teleopInit() {
-        //shifterSolenoid.set(true); //low
+        shifterSolenoid.set(true); //low
     }
 
     /**
@@ -136,13 +137,13 @@ public class Robot extends TimedRobot {
     public void teleopPeriodic() {
         robotDrive.arcadeDrive(-driveStick.getY(), driveWheel.getX());
 
-        /*if (xboxController.getAButtonPressed()) {
+        if (xboxController.getAButtonPressed()) {
             shifterSolenoid.set(true); //low
         }
 
         if (xboxController.getBButtonPressed()) {
             shifterSolenoid.set(false); //high
-        }*/
+        }
     }
 
     /**
