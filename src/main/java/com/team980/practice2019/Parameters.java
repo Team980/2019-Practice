@@ -40,6 +40,8 @@ public final class Parameters {
     public static final int RIGHT_TOP_DRIVE_CONTROLLER_CAN_ID = 0;
     public static final int RIGHT_BACK_DRIVE_CONTROLLER_CAN_ID = 1;
 
+    public static final double MAX_SPEED = 10.0;
+
     // ENCODERS
     public static final int LEFT_DRIVE_ENCODER_CHANNEL_A = 0;
     public static final int LEFT_DRIVE_ENCODER_CHANNEL_B = 1;
