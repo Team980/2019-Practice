@@ -25,7 +25,6 @@
 package com.team980.practice2019;
 
 import com.team980.practice2019.subsystems.DriveSystem;
-import com.team980.practice2019.subsystems.Pneumatics;
 import edu.wpi.first.networktables.NetworkTable;
 import edu.wpi.first.wpilibj.Joystick;
 import edu.wpi.first.wpilibj.TimedRobot;
@@ -45,7 +44,6 @@ public class Robot extends TimedRobot {
     private Joystick driveWheel;
     private XboxController xboxController;
 
-    private Pneumatics pneumatics;
     private DriveSystem driveSystem;
 
     /*private PigeonIMU imu;
@@ -57,12 +55,11 @@ public class Robot extends TimedRobot {
      */
     @Override
     public void robotInit() {
-        pneumatics = new Pneumatics();
-        driveSystem = new DriveSystem();
-
         driveStick = new Joystick(DRIVE_STICK_ID);
         driveWheel = new Joystick(DRIVE_WHEEL_ID);
         xboxController = new XboxController(XBOX_CONTROLLER_ID);
+
+        driveSystem = new DriveSystem();
 
         /*imu = new PigeonIMU(IMU_CAN_ID);
         ypr = new double[3];*/
@@ -81,10 +78,11 @@ public class Robot extends TimedRobot {
      */
     @Override
     public void autonomousInit() {
-        pneumatics.getShifterSolenoid().set(false); //low
+        driveSystem.setGear(DriveSystem.Gear.LOW);
+        driveSystem.setPIDEnabled(true);
+        driveSystem.setAutoShiftEnabled(false);
 
-        driveSystem.getLeftEncoder().reset(); //TODO move into DriveSystem?
-        driveSystem.getRightEncoder().reset();
+        driveSystem.resetEncoders();
 
         //imu.setYaw(0, 0);
     }
@@ -95,9 +93,9 @@ public class Robot extends TimedRobot {
     @Override
     public void autonomousPeriodic() {
         /*if (driveSystem.getLeftEncoder().getDistance() > 5.0 || driveSystem.getRightEncoder().getDistance() > 5.0) {
-            robotDrive.stopMotor();
+            driveSystem.disable();
         } else {
-            robotDrive.arcadeDrive(0.5, 0, false);
+            driveSystem.setSetpoints(3.0, 3.0);
         }*/
     }
 
@@ -106,7 +104,11 @@ public class Robot extends TimedRobot {
      */
     @Override
     public void teleopInit() {
-        pneumatics.getShifterSolenoid().set(false); //low
+        driveSystem.setGear(DriveSystem.Gear.LOW);
+        driveSystem.setPIDEnabled(true);
+        driveSystem.setAutoShiftEnabled(true);
+
+        driveSystem.resetEncoders();
     }
 
     /**
@@ -115,14 +117,6 @@ public class Robot extends TimedRobot {
     @Override
     public void teleopPeriodic() {
         driveSystem.arcadeDrive(-driveStick.getY(), driveWheel.getX());
-
-        if (xboxController.getAButtonPressed()) {
-            pneumatics.getShifterSolenoid().set(true); //high
-        }
-
-        if (xboxController.getBButtonPressed()) {
-            pneumatics.getShifterSolenoid().set(false); //low
-        }
     }
 
     /**

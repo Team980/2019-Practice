@@ -30,19 +30,21 @@ package com.team980.practice2019;
 @SuppressWarnings("WeakerAccess")
 public final class Parameters {
 
-    // CONSTANTS
-    public static final double TAU = 2 * Math.PI;
-    public static final double WHEEL_RADIUS = 2.0; // in inches
+    // JOYSTICKS
+    public static final int DRIVE_STICK_ID = 0;
+    public static final int DRIVE_WHEEL_ID = 1;
+    public static final int XBOX_CONTROLLER_ID = 2;
 
-    // DRIVE SYSTEM
+    // PNEUMATICS
+    public static final int PCM_CAN_ID = 0;
+
+    // DRIVE SYSTEM: SPEED CONTROLLERS
     public static final int LEFT_TOP_DRIVE_CONTROLLER_CAN_ID = 3;
     public static final int LEFT_BACK_DRIVE_CONTROLLER_CAN_ID = 2;
     public static final int RIGHT_TOP_DRIVE_CONTROLLER_CAN_ID = 0;
     public static final int RIGHT_BACK_DRIVE_CONTROLLER_CAN_ID = 1;
 
-    public static final double MAX_SPEED = 10.0;
-
-    // ENCODERS
+    // DRIVE SYSTEM: ENCODERS
     public static final int LEFT_DRIVE_ENCODER_CHANNEL_A = 0;
     public static final int LEFT_DRIVE_ENCODER_CHANNEL_B = 1;
     public static final boolean INVERT_LEFT_DRIVE_ENCODER = false;
@@ -53,15 +55,42 @@ public final class Parameters {
 
     public static final double DRIVE_ENCODER_PULSES_PER_REVOLUTION = 2048.0;
 
-    // IMU
-    public static final int IMU_CAN_ID = 0;
+    // DRIVE SYSTEM: VELOCITY CONTROL
+    public static final double MAX_DRIVE_SPEED = 17.0; //in ft/sec
 
-    // PNEUMATICS
-    public static final int PCM_CAN_ID = 0;
+    public static final double LOW_GEAR_PROPORTIONAL_COEFFICIENT = 0.1;
+    public static final double LOW_GEAR_INTEGRAL_COEFFICIENT = 0.0;
+    public static final double LOW_GEAR_DERIVATIVE_COEFFICIENT = 0.0;
+    public static final double LOW_GEAR_FEEDFORWARD_TERM = 0.0;
+
+    public static final double HIGH_GEAR_PROPORTIONAL_COEFFICIENT = 0.03;
+    public static final double HIGH_GEAR_INTEGRAL_COEFFICIENT = 0.0;
+    public static final double HIGH_GEAR_DERIVATIVE_COEFFICIENT = 0.0;
+    public static final double HIGH_GEAR_FEEDFORWARD_TERM = 0.0;
+
+    public static final double DRIVE_PID_TOLERANCE = 0.01;
+
+    // DRIVE SYSTEM: INPUT MODIFIERS
+    public static final double DRIVE_STICK_DEADBAND = 0.05;
+    public static final double DRIVE_STICK_SHIFT_POINT = 0.5;
+
+    public static final double LOW_GEAR_DRIVE_STICK_COEFFICIENT = 8.5;
+    public static final double HIGH_GEAR_DRIVE_STICK_COEFFICIENT = 25.5;
+    public static final double HIGH_GEAR_DRIVE_STICK_OFFSET = 8.5;
+
+    public static final double DRIVE_WHEEL_DEADBAND = 0.1;
+    public static final double DRIVE_WHEEL_COEFFICIENT = 0.5;
+
+    // DRIVE SYSTEM: SHIFTERS
     public static final int SHIFTER_SOLENOID_PCM_CHANNEL = 0;
 
-    // JOYSTICKS
-    public static final int DRIVE_STICK_ID = 0;
-    public static final int DRIVE_WHEEL_ID = 1;
-    public static final int XBOX_CONTROLLER_ID = 2;
+    public static final double DRIVE_SHIFT_UP_POINT = 4.5; // in ft/sec
+    public static final double DRIVE_SHIFT_DOWN_POINT = 4.0; // in ft/sec
+
+    // SENSORS
+    public static final int IMU_CAN_ID = 0;
+
+    // CONSTANTS
+    public static final double TAU = 2 * Math.PI;
+    public static final double WHEEL_RADIUS = 2.0; // in inches
 }
