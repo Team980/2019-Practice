@@ -26,9 +26,7 @@ package com.team980.practice2019;
 
 import com.team980.practice2019.subsystems.DriveSystem;
 import edu.wpi.first.networktables.NetworkTable;
-import edu.wpi.first.wpilibj.Joystick;
-import edu.wpi.first.wpilibj.TimedRobot;
-import edu.wpi.first.wpilibj.XboxController;
+import edu.wpi.first.wpilibj.*;
 
 import static com.team980.practice2019.Parameters.*;
 
@@ -46,6 +44,8 @@ public class Robot extends TimedRobot {
 
     private DriveSystem driveSystem;
 
+    private Spark encoderTestMotor;
+
     /*private PigeonIMU imu;
     private double[] ypr;*/ //Stores yaw/pitch/roll from IMU
 
@@ -60,6 +60,8 @@ public class Robot extends TimedRobot {
         xboxController = new XboxController(XBOX_CONTROLLER_ID);
 
         driveSystem = new DriveSystem();
+
+        encoderTestMotor = new Spark(0);
 
         /*imu = new PigeonIMU(IMU_CAN_ID);
         ypr = new double[3];*/
@@ -117,6 +119,8 @@ public class Robot extends TimedRobot {
     @Override
     public void teleopPeriodic() {
         driveSystem.arcadeDrive(-driveStick.getY(), driveWheel.getX());
+
+        encoderTestMotor.set(xboxController.getY(GenericHID.Hand.kLeft));
     }
 
     /**
