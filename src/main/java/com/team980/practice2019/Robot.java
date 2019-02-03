@@ -24,6 +24,7 @@
 
 package com.team980.practice2019;
 
+import com.team980.practice2019.sensors.Rioduino;
 import com.team980.practice2019.subsystems.DriveSystem;
 import edu.wpi.first.networktables.NetworkTable;
 import edu.wpi.first.wpilibj.*;
@@ -42,6 +43,8 @@ public class Robot extends TimedRobot {
     private Joystick driveWheel;
     private XboxController xboxController;
 
+    private Rioduino rioduino;
+
     private DriveSystem driveSystem;
 
     private Spark encoderTestMotor;
@@ -59,6 +62,8 @@ public class Robot extends TimedRobot {
         driveWheel = new Joystick(DRIVE_WHEEL_ID);
         xboxController = new XboxController(XBOX_CONTROLLER_ID);
 
+        rioduino = new Rioduino();
+
         driveSystem = new DriveSystem();
 
         encoderTestMotor = new Spark(0);
@@ -72,6 +77,7 @@ public class Robot extends TimedRobot {
      */
     @Override
     public void robotPeriodic() {
+        rioduino.updateData();
         //imu.getYawPitchRoll(ypr);
     }
 
@@ -120,7 +126,27 @@ public class Robot extends TimedRobot {
     public void teleopPeriodic() {
         driveSystem.arcadeDrive(-driveStick.getY(), driveWheel.getX());
 
-        encoderTestMotor.set(xboxController.getY(GenericHID.Hand.kLeft));
+        //encoderTestMotor.set(xboxController.getY(GenericHID.Hand.kLeft));
+
+        if (xboxController.getAButtonPressed()) {
+            byte s = 0;
+            rioduino.sendCommand(s);
+        }
+
+        if (xboxController.getBButtonPressed()) {
+            byte s = 1;
+            rioduino.sendCommand(s);
+        }
+
+        if (xboxController.getXButtonPressed()) {
+            byte s = -3;
+            rioduino.sendCommand(s);
+        }
+
+        if (xboxController.getYButtonPressed()) {
+            byte s = 121;
+            rioduino.sendCommand(s);
+        }
     }
 
     /**
