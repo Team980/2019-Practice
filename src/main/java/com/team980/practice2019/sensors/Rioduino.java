@@ -4,12 +4,20 @@ import edu.wpi.first.wpilibj.I2C;
 
 import java.nio.ByteBuffer;
 
+/**
+ * Communicates with a Rioduino connected to the roboRIO via MXP.
+ * Shares the received data with very easy to use getter methods,
+ * and provides a id-based command interface to set its properties.
+ */
 public class Rioduino {
 
     private static final int DEVICE_ADDRESS = 10;
-    private static final int BUFFER_SIZE = 2;
+    private static final int BUFFER_SIZE = 4;
 
     private I2C i2C;
+
+    private short distanceBetweenTargets;
+    private short targetCenterCoord;
 
     public Rioduino() {
         i2C = new I2C(I2C.Port.kMXP, DEVICE_ADDRESS);
@@ -21,16 +29,45 @@ public class Rioduino {
         i2C.readOnly(buffer, BUFFER_SIZE);
 
         buffer.position(0);
-        short value = buffer.getShort();
-        //System.out.println(value);
+        distanceBetweenTargets = buffer.getShort();
+        targetCenterCoord = buffer.getShort();
+
+        System.out.println("dist: " + distanceBetweenTargets
+                + "; center: " + targetCenterCoord);
     }
 
-    public void sendCommand(byte command) {
-        ByteBuffer buffer = ByteBuffer.allocate(2);
+    public void sendCommand(Command command) {
+        ByteBuffer buffer = ByteBuffer.allocate(1);
+        buffer.put(command.id);
+        i2C.writeBulk(buffer, 1);
+    }
 
-        buffer.put(command);
+    /**
+     * The distance between the two vision targets, in pixels
+     * -1 if no targets are detected
+     */
+    public short getDistanceBetweenTargets() {
+        return distanceBetweenTargets;
+    }
 
-        boolean status = i2C.writeBulk(buffer, 2);
-        System.out.println(status);
+    /**
+     * The center x-coordinate of the detected vision targets
+     * Ranges from zero to 319
+     * -1 if no targets are detected
+     */
+    public short getTargetCenterCoord() {
+        return targetCenterCoord;
+    }
+
+    public enum Command {
+
+        @Deprecated //unimplemented
+                SET_MODE_COLOR_TRACKING((byte) 0);
+
+        private byte id;
+
+        Command(byte id) {
+            this.id = id;
+        }
     }
 }

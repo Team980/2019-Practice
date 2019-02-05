@@ -24,10 +24,13 @@
 
 package com.team980.practice2019;
 
+import com.ctre.phoenix.sensors.PigeonIMU;
 import com.team980.practice2019.sensors.Rioduino;
 import com.team980.practice2019.subsystems.DriveSystem;
 import edu.wpi.first.networktables.NetworkTable;
-import edu.wpi.first.wpilibj.*;
+import edu.wpi.first.wpilibj.Joystick;
+import edu.wpi.first.wpilibj.TimedRobot;
+import edu.wpi.first.wpilibj.XboxController;
 
 import static com.team980.practice2019.Parameters.*;
 
@@ -47,10 +50,8 @@ public class Robot extends TimedRobot {
 
     private DriveSystem driveSystem;
 
-    private Spark encoderTestMotor;
-
-    /*private PigeonIMU imu;
-    private double[] ypr;*/ //Stores yaw/pitch/roll from IMU
+    private PigeonIMU imu;
+    private double[] ypr; //Stores yaw/pitch/roll from IMU
 
     /**
      * Robot-wide initialization code goes here.
@@ -66,10 +67,8 @@ public class Robot extends TimedRobot {
 
         driveSystem = new DriveSystem();
 
-        encoderTestMotor = new Spark(0);
-
-        /*imu = new PigeonIMU(IMU_CAN_ID);
-        ypr = new double[3];*/
+        imu = new PigeonIMU(IMU_CAN_ID);
+        ypr = new double[3];
     }
 
     /**
@@ -78,7 +77,7 @@ public class Robot extends TimedRobot {
     @Override
     public void robotPeriodic() {
         rioduino.updateData();
-        //imu.getYawPitchRoll(ypr);
+        imu.getYawPitchRoll(ypr);
     }
 
     /**
@@ -92,7 +91,7 @@ public class Robot extends TimedRobot {
 
         driveSystem.resetEncoders();
 
-        //imu.setYaw(0, 0);
+        imu.setYaw(0, 0);
     }
 
     /**
@@ -126,27 +125,6 @@ public class Robot extends TimedRobot {
     public void teleopPeriodic() {
         driveSystem.arcadeDrive(-driveStick.getY(), driveWheel.getX());
 
-        //encoderTestMotor.set(xboxController.getY(GenericHID.Hand.kLeft));
-
-        if (xboxController.getAButtonPressed()) {
-            byte s = 0;
-            rioduino.sendCommand(s);
-        }
-
-        if (xboxController.getBButtonPressed()) {
-            byte s = 1;
-            rioduino.sendCommand(s);
-        }
-
-        if (xboxController.getXButtonPressed()) {
-            byte s = -3;
-            rioduino.sendCommand(s);
-        }
-
-        if (xboxController.getYButtonPressed()) {
-            byte s = 121;
-            rioduino.sendCommand(s);
-        }
     }
 
     /**
