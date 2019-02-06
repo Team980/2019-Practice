@@ -9,7 +9,7 @@ import static com.team980.practice2019.Parameters.*;
 /**
  * Implements velocity control for our West Coast drive system.
  */
-public class DriveSystem implements Subsystem {
+public class DriveSystem {
 
     private SpeedControllerGroup leftDrive;
     private Encoder leftEncoder;
@@ -166,7 +166,6 @@ public class DriveSystem implements Subsystem {
         tankDrive(move + turn, move - turn);
     }
 
-    @Override
     public void disable() {
         setPIDEnabled(false);
 

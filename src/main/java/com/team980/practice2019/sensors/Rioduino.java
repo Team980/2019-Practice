@@ -31,9 +31,6 @@ public class Rioduino {
         buffer.position(0);
         distanceBetweenTargets = buffer.getShort();
         targetCenterCoord = buffer.getShort();
-
-        System.out.println("dist: " + distanceBetweenTargets
-                + "; center: " + targetCenterCoord);
     }
 
     public void sendCommand(Command command) {
@@ -46,7 +43,7 @@ public class Rioduino {
      * The distance between the two vision targets, in pixels
      * -1 if no targets are detected
      */
-    public short getDistanceBetweenTargets() {
+    public float getDistanceBetweenTargets() {
         return distanceBetweenTargets;
     }
 
@@ -55,8 +52,12 @@ public class Rioduino {
      * Ranges from zero to 319
      * -1 if no targets are detected
      */
-    public short getTargetCenterCoord() {
+    public float getTargetCenterCoord() {
         return targetCenterCoord;
+    }
+
+    public float getTargetCenterOffsetCoord() {
+        return targetCenterCoord - 160 - 5; //off center
     }
 
     public enum Command {
