@@ -175,8 +175,8 @@ public class DriveSystem implements Subsystem {
     }
 
     public enum Gear {
-        LOW(false),
-        HIGH(true);
+        LOW(true),
+        HIGH(false);
 
         private boolean solenoidValue;
 

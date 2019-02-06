@@ -28,11 +28,12 @@ import com.ctre.phoenix.sensors.PigeonIMU;
 import com.team980.practice2019.sensors.Rioduino;
 import com.team980.practice2019.subsystems.DriveSystem;
 import edu.wpi.first.networktables.NetworkTable;
-import edu.wpi.first.wpilibj.Joystick;
+import edu.wpi.first.wpilibj.GenericHID;
 import edu.wpi.first.wpilibj.TimedRobot;
 import edu.wpi.first.wpilibj.XboxController;
 
-import static com.team980.practice2019.Parameters.*;
+import static com.team980.practice2019.Parameters.IMU_CAN_ID;
+import static com.team980.practice2019.Parameters.XBOX_CONTROLLER_ID;
 
 /**
  * Base robot class for FRC Robot programming.
@@ -42,8 +43,8 @@ public class Robot extends TimedRobot {
 
     private NetworkTable table;
 
-    private Joystick driveStick;
-    private Joystick driveWheel;
+    //private Joystick driveStick;
+    //private Joystick driveWheel;
     private XboxController xboxController;
 
     private Rioduino rioduino;
@@ -59,8 +60,8 @@ public class Robot extends TimedRobot {
      */
     @Override
     public void robotInit() {
-        driveStick = new Joystick(DRIVE_STICK_ID);
-        driveWheel = new Joystick(DRIVE_WHEEL_ID);
+        //driveStick = new Joystick(DRIVE_STICK_ID);
+        //driveWheel = new Joystick(DRIVE_WHEEL_ID);
         xboxController = new XboxController(XBOX_CONTROLLER_ID);
 
         rioduino = new Rioduino();
@@ -112,8 +113,8 @@ public class Robot extends TimedRobot {
     @Override
     public void teleopInit() {
         driveSystem.setGear(DriveSystem.Gear.LOW);
-        driveSystem.setPIDEnabled(true);
-        driveSystem.setAutoShiftEnabled(true);
+        driveSystem.setPIDEnabled(false); //TODO true
+        driveSystem.setAutoShiftEnabled(false); //TODO true
 
         driveSystem.resetEncoders();
     }
@@ -123,8 +124,8 @@ public class Robot extends TimedRobot {
      */
     @Override
     public void teleopPeriodic() {
-        driveSystem.arcadeDrive(-driveStick.getY(), driveWheel.getX());
-
+        //driveSystem.arcadeDrive(-driveStick.getY(), driveWheel.getX());
+        driveSystem.arcadeDrive(-xboxController.getY(GenericHID.Hand.kLeft), xboxController.getX(GenericHID.Hand.kRight));
     }
 
     /**
