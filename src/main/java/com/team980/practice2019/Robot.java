@@ -30,32 +30,33 @@ import com.team980.practice2019.sensors.Rioduino;
 import com.team980.practice2019.subsystems.DriveSystem;
 import edu.wpi.first.networktables.NetworkTable;
 import edu.wpi.first.networktables.NetworkTableInstance;
-import edu.wpi.first.wpilibj.GenericHID;
+import edu.wpi.first.wpilibj.Joystick;
 import edu.wpi.first.wpilibj.TimedRobot;
 import edu.wpi.first.wpilibj.XboxController;
 import edu.wpi.first.wpilibj.command.Scheduler;
 
-import static com.team980.practice2019.Parameters.IMU_CAN_ID;
-import static com.team980.practice2019.Parameters.XBOX_CONTROLLER_ID;
+import static com.team980.practice2019.Parameters.*;
 
 /**
  * Base robot class for FRC Robot programming.
  * Periodic methods are called on a 20ms timer.
  */
-public class Robot extends TimedRobot {
+public final class Robot extends TimedRobot {
 
     private NetworkTable table;
 
-    //private Joystick driveStick;
-    //private Joystick driveWheel;
+    private Joystick driveStick;
+    private Joystick driveWheel;
     private XboxController xboxController;
 
     private Rioduino rioduino;
 
-    private DriveSystem driveSystem;
-
     private PigeonIMU imu;
     private double[] ypr; //Stores yaw/pitch/roll from IMU
+
+    private DriveSystem driveSystem;
+
+    private Autonomous.Builder autonomous;
 
     /**
      * Robot-wide initialization code goes here.
@@ -63,18 +64,20 @@ public class Robot extends TimedRobot {
      */
     @Override
     public void robotInit() {
-        table = NetworkTableInstance.getDefault().getTable("Data");
+        table = NetworkTableInstance.getDefault().getTable("Data"); //TODO figure out how they want us to do this
 
-        //driveStick = new Joystick(DRIVE_STICK_ID);
-        //driveWheel = new Joystick(DRIVE_WHEEL_ID);
+        driveStick = new Joystick(DRIVE_STICK_ID);
+        driveWheel = new Joystick(DRIVE_WHEEL_ID);
         xboxController = new XboxController(XBOX_CONTROLLER_ID);
 
         rioduino = new Rioduino();
 
-        driveSystem = new DriveSystem();
-
         imu = new PigeonIMU(IMU_CAN_ID);
         ypr = new double[3];
+
+        driveSystem = new DriveSystem();
+
+        autonomous = new Autonomous.Builder(driveSystem);
     }
 
     /**
@@ -95,16 +98,15 @@ public class Robot extends TimedRobot {
      */
     @Override
     public void autonomousInit() {
-        driveSystem.setGear(DriveSystem.Gear.HIGH);
+        imu.setYaw(0, 0);
+
+        driveSystem.setGear(DriveSystem.Gear.LOW);
         driveSystem.setPIDEnabled(true);
         driveSystem.setAutoShiftEnabled(false);
 
         driveSystem.resetEncoders();
 
-        imu.setYaw(0, 0);
-
-        new Autonomous.Builder(driveSystem)
-                .build(Autonomous.Side.RIGHT).start();
+        autonomous.build(Autonomous.Side.RIGHT).start();
     }
 
     /**
@@ -134,8 +136,8 @@ public class Robot extends TimedRobot {
     @Override
     public void teleopInit() {
         driveSystem.setGear(DriveSystem.Gear.LOW);
-        driveSystem.setPIDEnabled(false); //TODO true
-        driveSystem.setAutoShiftEnabled(false); //TODO true
+        driveSystem.setPIDEnabled(true);
+        driveSystem.setAutoShiftEnabled(true);
 
         driveSystem.resetEncoders();
     }
@@ -145,8 +147,8 @@ public class Robot extends TimedRobot {
      */
     @Override
     public void teleopPeriodic() {
-        //driveSystem.arcadeDrive(-driveStick.getY(), driveWheel.getX());
-        driveSystem.arcadeDrive(-xboxController.getY(GenericHID.Hand.kLeft), xboxController.getX(GenericHID.Hand.kRight));
+        driveSystem.arcadeDrive(-driveStick.getY(), driveWheel.getX());
+        //driveSystem.arcadeDrive(-xboxController.getY(GenericHID.Hand.kLeft), xboxController.getX(GenericHID.Hand.kRight));
     }
 
     /**

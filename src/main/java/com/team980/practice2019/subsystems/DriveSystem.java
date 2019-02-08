@@ -9,7 +9,7 @@ import static com.team980.practice2019.Parameters.*;
 /**
  * Implements velocity control for our West Coast drive system.
  */
-public class DriveSystem {
+public final class DriveSystem {
 
     private SpeedControllerGroup leftDrive;
     private Encoder leftEncoder;
@@ -24,7 +24,7 @@ public class DriveSystem {
     private boolean isAutoShiftEnabled = false;
 
     public DriveSystem() {
-        WPI_TalonSRX leftTopMotor = new WPI_TalonSRX(LEFT_TOP_DRIVE_CONTROLLER_CAN_ID);
+        var leftTopMotor = new WPI_TalonSRX(LEFT_TOP_DRIVE_CONTROLLER_CAN_ID);
         leftTopMotor.setInverted(true);
         leftDrive = new SpeedControllerGroup(leftTopMotor, new WPI_TalonSRX(LEFT_BACK_DRIVE_CONTROLLER_CAN_ID));
         leftDrive.setName("Drive System", "Left Speed Controllers");
@@ -40,7 +40,7 @@ public class DriveSystem {
         leftController.setName("Drive System", "Left PID Controller");
         LiveWindow.add(leftController);
 
-        WPI_TalonSRX rightTopMotor = new WPI_TalonSRX(RIGHT_TOP_DRIVE_CONTROLLER_CAN_ID);
+        var rightTopMotor = new WPI_TalonSRX(RIGHT_TOP_DRIVE_CONTROLLER_CAN_ID);
         rightTopMotor.setInverted(true);
         rightDrive = new SpeedControllerGroup(rightTopMotor, new WPI_TalonSRX(RIGHT_BACK_DRIVE_CONTROLLER_CAN_ID));
         rightDrive.setInverted(true);
@@ -58,7 +58,7 @@ public class DriveSystem {
         rightController.setName("Drive System", "Right PID Controller");
         LiveWindow.add(rightController);
 
-        shifterSolenoid = new Solenoid(PCM_CAN_ID, SHIFTER_SOLENOID_PCM_CHANNEL);
+        shifterSolenoid = new Solenoid(SHIFTER_SOLENOID_PCM_CHANNEL);
         shifterSolenoid.setName("Drive System", "Shifter Solenoid");
     }
 
@@ -101,17 +101,37 @@ public class DriveSystem {
     }
 
     /**
-     * @param left Requested left speed, scaled
+     * Separated so it can run in both auto and teleop
+     */
+    private void runAutoShift() {
+        if (isAutoShiftEnabled) {
+            if (Math.abs(leftEncoder.getRate()) > DRIVE_SHIFT_UP_POINT && Math.abs(rightEncoder.getRate()) > DRIVE_SHIFT_UP_POINT) {
+                setGear(Gear.HIGH);
+
+                leftController.setPID(HIGH_GEAR_PROPORTIONAL_COEFFICIENT, HIGH_GEAR_INTEGRAL_COEFFICIENT, HIGH_GEAR_DERIVATIVE_COEFFICIENT, HIGH_GEAR_FEEDFORWARD_TERM);
+                rightController.setPID(HIGH_GEAR_PROPORTIONAL_COEFFICIENT, HIGH_GEAR_INTEGRAL_COEFFICIENT, HIGH_GEAR_DERIVATIVE_COEFFICIENT, HIGH_GEAR_FEEDFORWARD_TERM);
+            } else if (Math.abs(leftEncoder.getRate()) < DRIVE_SHIFT_DOWN_POINT && Math.abs(rightEncoder.getRate()) < DRIVE_SHIFT_DOWN_POINT) {
+                setGear(Gear.LOW);
+
+                leftController.setPID(LOW_GEAR_PROPORTIONAL_COEFFICIENT, LOW_GEAR_INTEGRAL_COEFFICIENT, LOW_GEAR_DERIVATIVE_COEFFICIENT, LOW_GEAR_FEEDFORWARD_TERM);
+                rightController.setPID(LOW_GEAR_PROPORTIONAL_COEFFICIENT, LOW_GEAR_INTEGRAL_COEFFICIENT, LOW_GEAR_DERIVATIVE_COEFFICIENT, LOW_GEAR_FEEDFORWARD_TERM);
+            }
+        }
+    }
+
+    /**
+     * @param left  Requested left speed, scaled
      * @param right Requested right speed, scaled
      */
     public void setSetpoints(double left, double right) {
         leftController.setSetpoint(left);
         rightController.setSetpoint(right);
+
+        runAutoShift();
     }
 
     /**
-     *
-     * @param left Requested left command, from -1 to 1
+     * @param left  Requested left command, from -1 to 1
      * @param right Requested right command, from -1 to 1
      */
     public void tankDrive(double left, double right) {
@@ -135,25 +155,12 @@ public class DriveSystem {
         } else {
             leftDrive.set(left);
             rightDrive.set(right);
-        }
 
-        if (isAutoShiftEnabled) {
-            if (Math.abs(leftEncoder.getRate()) > DRIVE_SHIFT_UP_POINT && Math.abs(rightEncoder.getRate()) > DRIVE_SHIFT_UP_POINT) {
-                setGear(Gear.HIGH);
-
-                leftController.setPID(HIGH_GEAR_PROPORTIONAL_COEFFICIENT, HIGH_GEAR_INTEGRAL_COEFFICIENT, HIGH_GEAR_DERIVATIVE_COEFFICIENT, HIGH_GEAR_FEEDFORWARD_TERM);
-                rightController.setPID(HIGH_GEAR_PROPORTIONAL_COEFFICIENT, HIGH_GEAR_INTEGRAL_COEFFICIENT, HIGH_GEAR_DERIVATIVE_COEFFICIENT, HIGH_GEAR_FEEDFORWARD_TERM);
-            } else if (Math.abs(leftEncoder.getRate()) < DRIVE_SHIFT_DOWN_POINT && Math.abs(rightEncoder.getRate()) < DRIVE_SHIFT_DOWN_POINT) {
-                setGear(Gear.LOW);
-
-                leftController.setPID(LOW_GEAR_PROPORTIONAL_COEFFICIENT, LOW_GEAR_INTEGRAL_COEFFICIENT, LOW_GEAR_DERIVATIVE_COEFFICIENT, LOW_GEAR_FEEDFORWARD_TERM);
-                rightController.setPID(LOW_GEAR_PROPORTIONAL_COEFFICIENT, LOW_GEAR_INTEGRAL_COEFFICIENT, LOW_GEAR_DERIVATIVE_COEFFICIENT, LOW_GEAR_FEEDFORWARD_TERM);
-            }
+            runAutoShift();
         }
     }
 
     /**
-     *
      * @param move Requested move command, from -1 to 1
      * @param turn Requested turn command, from -1 to 1
      */

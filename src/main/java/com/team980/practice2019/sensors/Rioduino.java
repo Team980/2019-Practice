@@ -9,7 +9,7 @@ import java.nio.ByteBuffer;
  * Shares the received data with very easy to use getter methods,
  * and provides a id-based command interface to set its properties.
  */
-public class Rioduino {
+public final class Rioduino {
 
     private static final int DEVICE_ADDRESS = 10;
     private static final int BUFFER_SIZE = 4;
