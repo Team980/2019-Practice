@@ -36,10 +36,13 @@ public final class Parameters {
     public static final int XBOX_CONTROLLER_ID = 2;
 
     // AUTONOMOUS
-    public static final double AUTO_MIN_SPEED = 0.25; //in ft/sec
+    public static final double AUTO_MIN_SPEED = 0.75; //in ft/sec
     public static final double AUTO_MAX_SPEED = 4.0; //in ft/sec
 
-    public static final double AUTO_MOVE_MULTIPLIER = 5.0;
+    public static final double AUTO_MOVE_DIVISOR = 0.5;
+
+    public static final double AUTO_TURN_DIVISOR = 100.0;
+    public static final double AUTO_TURN_THRESHOLD = 0.5; //in degrees
 
     // DRIVE SYSTEM: SPEED CONTROLLERS
     public static final int LEFT_TOP_DRIVE_CONTROLLER_CAN_ID = 3;

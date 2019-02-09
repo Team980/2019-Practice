@@ -77,7 +77,7 @@ public final class Robot extends TimedRobot {
 
         driveSystem = new DriveSystem();
 
-        autonomous = new Autonomous.Builder(driveSystem);
+        autonomous = new Autonomous.Builder(driveSystem, ypr);
     }
 
     /**
@@ -91,6 +91,10 @@ public final class Robot extends TimedRobot {
         //TODO determine the formal way to do this
         table.getSubTable("Sensors").getSubTable("Rioduino").getEntry("Distance Between Targets").setNumber(rioduino.getDistanceBetweenTargets());
         table.getSubTable("Sensors").getSubTable("Rioduino").getEntry("Target Center Coord").setNumber(rioduino.getTargetCenterOffsetCoord());
+
+        table.getSubTable("Sensors").getSubTable("IMU").getEntry("Yaw").setNumber(ypr[0]);
+        table.getSubTable("Sensors").getSubTable("IMU").getEntry("Pitch").setNumber(ypr[1]);
+        table.getSubTable("Sensors").getSubTable("IMU").getEntry("Roll").setNumber(ypr[2]);
     }
 
     /**
@@ -105,6 +109,8 @@ public final class Robot extends TimedRobot {
         driveSystem.setAutoShiftEnabled(false);
 
         driveSystem.resetEncoders();
+
+        Scheduler.getInstance().removeAll();
 
         autonomous.build(Autonomous.Side.RIGHT).start();
     }

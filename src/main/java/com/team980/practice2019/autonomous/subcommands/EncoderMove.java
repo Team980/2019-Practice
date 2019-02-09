@@ -38,7 +38,7 @@ public final class EncoderMove extends Command {
                 differential -= driveSystem.getRightEncoder().getDistance();
             }
 
-            var speed = differential * (AUTO_MAX_SPEED / distance) * AUTO_MOVE_MULTIPLIER;
+            var speed = (differential / AUTO_MOVE_DIVISOR) * AUTO_MAX_SPEED;
 
             if (Math.abs(speed) < AUTO_MIN_SPEED) speed = Math.copySign(AUTO_MIN_SPEED, speed);
             if (Math.abs(speed) > AUTO_MAX_SPEED) speed = Math.copySign(AUTO_MAX_SPEED, speed);
