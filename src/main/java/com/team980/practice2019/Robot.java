@@ -120,19 +120,6 @@ public final class Robot extends TimedRobot {
      */
     @Override
     public void autonomousPeriodic() {
-        /*if (driveSystem.getLeftEncoder().getDistance() > 5.0 || driveSystem.getRightEncoder().getDistance() > 5.0) {
-            driveSystem.disable();
-        } else {
-            driveSystem.setSetpoints(3.0, 3.0);
-        }*/
-
-        // Target detection and acquisition
-        /*if (rioduino.getTargetCenterCoord() > -1) {
-            driveSystem.arcadeDrive(0.4, rioduino.getTargetCenterOffsetCoord() / 200);
-        } else {
-            driveSystem.tankDrive(0, 0);
-        }*/
-
         Scheduler.getInstance().run();
     }
 
