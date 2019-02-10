@@ -16,8 +16,8 @@ public final class Rioduino {
 
     private I2C i2C;
 
-    private short distanceBetweenTargets;
     private short targetCenterCoord;
+    private short targetWidth;
 
     public Rioduino() {
         i2C = new I2C(I2C.Port.kMXP, DEVICE_ADDRESS);
@@ -29,8 +29,8 @@ public final class Rioduino {
         i2C.readOnly(buffer, BUFFER_SIZE);
 
         buffer.position(0);
-        distanceBetweenTargets = buffer.getShort();
         targetCenterCoord = buffer.getShort();
+        targetWidth = buffer.getShort();
     }
 
     public void sendCommand(Command command) {
@@ -40,24 +40,20 @@ public final class Rioduino {
     }
 
     /**
-     * The distance between the two vision targets, in pixels
-     * -1 if no targets are detected
+     * <p>The center x-coordinate of the detected vision targets</p>
+     * <p>Ranges from zero to 319</p>
+     * <p>-1 if no targets are detected</p>
      */
-    public float getDistanceBetweenTargets() {
-        return distanceBetweenTargets;
-    }
-
-    /**
-     * The center x-coordinate of the detected vision targets
-     * Ranges from zero to 319
-     * -1 if no targets are detected
-     */
-    public float getTargetCenterCoord() {
+    public double getTargetCenterCoord() {
         return targetCenterCoord;
     }
 
-    public float getTargetCenterOffsetCoord() {
-        return targetCenterCoord - 160 - 5; //off center
+    /**
+     * <p>The combined width of the vision targets, in pixels</p>
+     * <p>-1 if no targets are detected</p>
+     */
+    public double getTargetWidth() {
+        return targetWidth;
     }
 
     public enum Command {

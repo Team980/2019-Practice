@@ -8,15 +8,19 @@ import static com.team980.practice2019.Parameters.*;
 public final class EncoderMove extends Command {
 
     private DriveSystem driveSystem;
+    private double[] ypr;
+
+    private double initialHeading;
 
     private final double distance;
 
     private boolean isFinished = false;
 
-    public EncoderMove(DriveSystem driveSystem, double distance) {
+    public EncoderMove(DriveSystem driveSystem, double[] ypr, double distance) {
         super("EncoderMove: " + distance + " feet");
 
         this.driveSystem = driveSystem;
+        this.ypr = ypr;
 
         this.distance = distance;
     }
@@ -24,6 +28,8 @@ public final class EncoderMove extends Command {
     @Override
     protected void initialize() {
         driveSystem.resetEncoders();
+
+        initialHeading = ypr[0];
     }
 
     @Override
@@ -43,9 +49,9 @@ public final class EncoderMove extends Command {
             if (Math.abs(speed) < AUTO_MIN_SPEED) speed = Math.copySign(AUTO_MIN_SPEED, speed);
             if (Math.abs(speed) > AUTO_MAX_SPEED) speed = Math.copySign(AUTO_MAX_SPEED, speed);
 
-            //TODO IMU compensation
+            var turnCorrect = (initialHeading - ypr[0]) / AUTO_TURN_CORRECTION_DIVISOR;
 
-            driveSystem.setSetpoints(speed, speed);
+            driveSystem.setSetpoints(speed - turnCorrect, speed + turnCorrect);
         } else {
             isFinished = true;
         }

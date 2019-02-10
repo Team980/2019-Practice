@@ -40,9 +40,13 @@ public final class Parameters {
     public static final double AUTO_MAX_SPEED = 4.0; //in ft/sec
 
     public static final double AUTO_MOVE_DIVISOR = 0.5;
+    public static final double AUTO_TURN_CORRECTION_DIVISOR = 15;
 
     public static final double AUTO_TURN_DIVISOR = 100.0;
     public static final double AUTO_TURN_THRESHOLD = 0.5; //in degrees
+
+    public static final double AUTO_TARGET_SCORING_WIDTH = 200;
+    public static final double AUTO_VISION_CORRECTION_DIVISOR = 80;
 
     // DRIVE SYSTEM: SPEED CONTROLLERS
     public static final int LEFT_TOP_DRIVE_CONTROLLER_CAN_ID = 3;

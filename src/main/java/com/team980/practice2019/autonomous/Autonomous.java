@@ -1,36 +1,34 @@
 package com.team980.practice2019.autonomous;
 
-import com.team980.practice2019.autonomous.subcommands.EncoderMove;
 import com.team980.practice2019.autonomous.subcommands.IMUTurn;
+import com.team980.practice2019.autonomous.subcommands.VisionTrack;
+import com.team980.practice2019.sensors.Rioduino;
 import com.team980.practice2019.subsystems.DriveSystem;
 import edu.wpi.first.wpilibj.command.CommandGroup;
 
 public final class Autonomous extends CommandGroup {
 
-    private Autonomous(DriveSystem driveSystem, double[] ypr, Side side) {
+    private Autonomous(DriveSystem driveSystem, Rioduino rioduino, double[] ypr, Side side) {
         super("Autonomous");
 
-        addSequential(new EncoderMove(driveSystem, 6.0));
+        addSequential(new IMUTurn(driveSystem, ypr, -30 * side.invert));
 
-        addSequential(new IMUTurn(driveSystem, ypr, -45 * side.invert));
-
-        addSequential(new EncoderMove(driveSystem, 2.0));
-
-        addSequential(new EncoderMove(driveSystem, -5.0));
-
-        addSequential(new IMUTurn(driveSystem, ypr, 45 * side.invert));
-
-        addSequential(new EncoderMove(driveSystem, -3.0));
+        addSequential(new VisionTrack(driveSystem, rioduino));
 
         // 1. Drive forward (time) until on slope of platform
 
         // 2. Drive forward until IMU stabilizes
 
         // 3. Turn to overshot angle
+        //addSequential(new IMUTurn(driveSystem, ypr, -35 * side.invert));
 
-        // 4. Drive forward determined length
+        // 4. Drive forward to midpoint
+        //addSequential(new EncoderMove(driveSystem, ypr, 7.35));
 
-        // 5. Use Pixy to drive to target (and score)
+        // 5: Turn to face rocket
+        //addSequential(new IMUTurn(driveSystem, ypr, -30 * side.invert));
+
+        // 5.5. Use Pixy to drive to target (and score)
 
         // 6. Back up short length
 
@@ -44,7 +42,7 @@ public final class Autonomous extends CommandGroup {
 
         // 11. Drive to center of field
 
-        // 12. Turn to far side of rocket
+        // 12. Turn to far side of rocket (+30)
 
         // 13. Drive into rocket, score
 
@@ -64,15 +62,17 @@ public final class Autonomous extends CommandGroup {
     public static final class Builder {
 
         private DriveSystem driveSystem;
+        private Rioduino rioduino;
         private double[] ypr;
 
-        public Builder(DriveSystem driveSystem, double[] ypr) {
+        public Builder(DriveSystem driveSystem, Rioduino rioduino, double[] ypr) {
             this.driveSystem = driveSystem;
+            this.rioduino = rioduino;
             this.ypr = ypr;
         }
 
         public Autonomous build(Side side) {
-            return new Autonomous(driveSystem, ypr, side);
+            return new Autonomous(driveSystem, rioduino, ypr, side);
         }
     }
 }

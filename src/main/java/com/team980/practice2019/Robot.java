@@ -77,7 +77,7 @@ public final class Robot extends TimedRobot {
 
         driveSystem = new DriveSystem();
 
-        autonomous = new Autonomous.Builder(driveSystem, ypr);
+        autonomous = new Autonomous.Builder(driveSystem, rioduino, ypr);
     }
 
     /**
@@ -89,8 +89,8 @@ public final class Robot extends TimedRobot {
         imu.getYawPitchRoll(ypr);
 
         //TODO determine the formal way to do this
-        table.getSubTable("Sensors").getSubTable("Rioduino").getEntry("Distance Between Targets").setNumber(rioduino.getDistanceBetweenTargets());
-        table.getSubTable("Sensors").getSubTable("Rioduino").getEntry("Target Center Coord").setNumber(rioduino.getTargetCenterOffsetCoord());
+        table.getSubTable("Sensors").getSubTable("Rioduino").getEntry("Target Center Coord").setNumber(rioduino.getTargetCenterCoord());
+        table.getSubTable("Sensors").getSubTable("Rioduino").getEntry("Target Width").setNumber(rioduino.getTargetWidth());
 
         table.getSubTable("Sensors").getSubTable("IMU").getEntry("Yaw").setNumber(ypr[0]);
         table.getSubTable("Sensors").getSubTable("IMU").getEntry("Pitch").setNumber(ypr[1]);
