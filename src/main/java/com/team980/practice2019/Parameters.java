@@ -43,9 +43,9 @@ public final class Parameters {
     public static final double AUTO_TURN_CORRECTION_DIVISOR = 15;
 
     public static final double AUTO_TURN_DIVISOR = 100.0;
-    public static final double AUTO_TURN_THRESHOLD = 0.5; //in degrees
+    public static final double AUTO_TURN_THRESHOLD = 0.4; //in degrees
 
-    public static final double AUTO_TARGET_SCORING_WIDTH = 200;
+    public static final double AUTO_TARGET_SCORING_WIDTH = 36;
     public static final double AUTO_VISION_CORRECTION_DIVISOR = 80;
 
     // DRIVE SYSTEM: SPEED CONTROLLERS
@@ -55,12 +55,12 @@ public final class Parameters {
     public static final int RIGHT_BACK_DRIVE_CONTROLLER_CAN_ID = 1;
 
     // DRIVE SYSTEM: ENCODERS
-    public static final int LEFT_DRIVE_ENCODER_CHANNEL_A = 0;
-    public static final int LEFT_DRIVE_ENCODER_CHANNEL_B = 1;
+    public static final int LEFT_DRIVE_ENCODER_CHANNEL_A = 6;
+    public static final int LEFT_DRIVE_ENCODER_CHANNEL_B = 7;
     public static final boolean INVERT_LEFT_DRIVE_ENCODER = false;
 
-    public static final int RIGHT_DRIVE_ENCODER_CHANNEL_A = 2;
-    public static final int RIGHT_DRIVE_ENCODER_CHANNEL_B = 3;
+    public static final int RIGHT_DRIVE_ENCODER_CHANNEL_A = 8;
+    public static final int RIGHT_DRIVE_ENCODER_CHANNEL_B = 9;
     public static final boolean INVERT_RIGHT_DRIVE_ENCODER = true;
 
     public static final double DRIVE_ENCODER_PULSES_PER_REVOLUTION = 2048.0;

@@ -110,8 +110,6 @@ public final class Robot extends TimedRobot {
 
         driveSystem.resetEncoders();
 
-        Scheduler.getInstance().removeAll();
-
         autonomous.build(Autonomous.Side.RIGHT).start();
     }
 
@@ -151,5 +149,7 @@ public final class Robot extends TimedRobot {
     @Override
     public void disabledInit() {
         driveSystem.disable();
+
+        Scheduler.getInstance().removeAll();
     }
 }

@@ -1,5 +1,6 @@
 package com.team980.practice2019.autonomous;
 
+import com.team980.practice2019.autonomous.subcommands.EncoderMove;
 import com.team980.practice2019.autonomous.subcommands.IMUTurn;
 import com.team980.practice2019.autonomous.subcommands.VisionTrack;
 import com.team980.practice2019.sensors.Rioduino;
@@ -11,30 +12,32 @@ public final class Autonomous extends CommandGroup {
     private Autonomous(DriveSystem driveSystem, Rioduino rioduino, double[] ypr, Side side) {
         super("Autonomous");
 
-        addSequential(new IMUTurn(driveSystem, ypr, -30 * side.invert));
-
-        addSequential(new VisionTrack(driveSystem, rioduino));
-
         // 1. Drive forward (time) until on slope of platform
 
         // 2. Drive forward until IMU stabilizes
 
         // 3. Turn to overshot angle
-        //addSequential(new IMUTurn(driveSystem, ypr, -35 * side.invert));
+        addSequential(new IMUTurn(driveSystem, ypr, -54.5 * side.invert));
 
         // 4. Drive forward to midpoint
-        //addSequential(new EncoderMove(driveSystem, ypr, 7.35));
+        addSequential(new EncoderMove(driveSystem, ypr, 7.0));
 
         // 5: Turn to face rocket
-        //addSequential(new IMUTurn(driveSystem, ypr, -30 * side.invert));
+        addSequential(new IMUTurn(driveSystem, ypr, -30 * side.invert));
 
         // 5.5. Use Pixy to drive to target (and score)
+        addSequential(new VisionTrack(driveSystem, rioduino));
 
         // 6. Back up short length
+        addSequential(new EncoderMove(driveSystem, ypr, -2.5));
 
         // 7. Turn to zero
+        addSequential(new IMUTurn(driveSystem, ypr, 0));
 
         // 8. Drive to loading station
+        addSequential(new EncoderMove(driveSystem, ypr, -10.0));
+
+        // 8.5. Use Pixy to pick up from loading station
 
         // 9. Inch forward
 
