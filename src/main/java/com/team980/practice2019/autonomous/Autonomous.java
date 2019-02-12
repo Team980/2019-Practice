@@ -47,7 +47,9 @@ public final class Autonomous extends CommandGroup {
 
         // 12. Turn to far side of rocket (+30)
 
-        // 13. Drive into rocket, score
+        // 13. Drive towards rocket
+
+        // 13.5 Use Pixy to score
 
     }
 

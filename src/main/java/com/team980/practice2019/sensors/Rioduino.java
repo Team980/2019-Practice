@@ -42,7 +42,6 @@ public final class Rioduino {
     /**
      * <p>The center x-coordinate of the detected vision targets</p>
      * <p>Ranges from zero to 319</p>
-     * <p>-1 if no targets are detected</p>
      */
     public double getTargetCenterCoord() {
         return targetCenterCoord;
@@ -50,7 +49,6 @@ public final class Rioduino {
 
     /**
      * <p>The combined width of the vision targets, in pixels</p>
-     * <p>-1 if no targets are detected</p>
      */
     public double getTargetWidth() {
         return targetWidth;
