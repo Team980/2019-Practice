@@ -49,7 +49,13 @@ deploy {
     }
 }
 
+repositories {
+    maven { url 'https://nexus.otake.pw/repository/maven-public/' }
+}
+
 dependencies {
+    compile 'pw.otake.pseudoresonance:pixy2-java-api:1.3.1'
+    
     compile wpi.deps.wpilib()
     compile wpi.deps.vendor.java()
     nativeZip wpi.deps.vendor.jni(wpi.platforms.roborio)

@@ -1,5 +1,6 @@
 package com.team980.practice2019.sensors;
 
+import com.team980.practice2019.vision.VisionDataProvider;
 import edu.wpi.first.wpilibj.I2C;
 
 import java.nio.ByteBuffer;
@@ -8,8 +9,10 @@ import java.nio.ByteBuffer;
  * Communicates with a Rioduino connected to the roboRIO via MXP.
  * Shares the received data with very easy to use getter methods,
  * and provides a id-based command interface to set its properties.
+ *
+ * Implements VisionDataProvider to provide data from the front Pixy, which was already calculated offboard.
  */
-public final class Rioduino {
+public final class Rioduino implements VisionDataProvider {
 
     private static final int DEVICE_ADDRESS = 10;
     private static final int BUFFER_SIZE = 4;
@@ -37,6 +40,11 @@ public final class Rioduino {
         ByteBuffer buffer = ByteBuffer.allocate(1);
         buffer.put(command.id);
         i2C.writeBulk(buffer, 1);
+    }
+
+    @Override
+    public String getSource() {
+        return "Rioduino";
     }
 
     /**

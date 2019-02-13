@@ -28,6 +28,7 @@ import com.ctre.phoenix.sensors.PigeonIMU;
 import com.team980.practice2019.autonomous.Autonomous;
 import com.team980.practice2019.sensors.Rioduino;
 import com.team980.practice2019.subsystems.DriveSystem;
+import com.team980.practice2019.vision.BackCameraProcessor;
 import edu.wpi.first.networktables.NetworkTable;
 import edu.wpi.first.networktables.NetworkTableInstance;
 import edu.wpi.first.wpilibj.Joystick;
@@ -54,6 +55,8 @@ public final class Robot extends TimedRobot {
     private PigeonIMU imu;
     private double[] ypr; //Stores yaw/pitch/roll from IMU
 
+    private BackCameraProcessor cameraProcessor;
+
     private DriveSystem driveSystem;
 
     private Autonomous.Builder autonomous;
@@ -75,9 +78,11 @@ public final class Robot extends TimedRobot {
         imu = new PigeonIMU(IMU_CAN_ID);
         ypr = new double[3];
 
+        cameraProcessor = new BackCameraProcessor();
+
         driveSystem = new DriveSystem();
 
-        autonomous = new Autonomous.Builder(driveSystem, rioduino, ypr);
+        autonomous = new Autonomous.Builder(driveSystem, rioduino, cameraProcessor, ypr);
     }
 
     /**
@@ -88,13 +93,18 @@ public final class Robot extends TimedRobot {
         rioduino.updateData();
         imu.getYawPitchRoll(ypr);
 
-        //TODO determine the formal way to do this
-        table.getSubTable("Sensors").getSubTable("Rioduino").getEntry("Target Center Coord").setNumber(rioduino.getTargetCenterCoord());
-        table.getSubTable("Sensors").getSubTable("Rioduino").getEntry("Target Width").setNumber(rioduino.getTargetWidth());
+        cameraProcessor.updateData();
 
+        //TODO determine the formal way to do this
         table.getSubTable("Sensors").getSubTable("IMU").getEntry("Yaw").setNumber(ypr[0]);
         table.getSubTable("Sensors").getSubTable("IMU").getEntry("Pitch").setNumber(ypr[1]);
         table.getSubTable("Sensors").getSubTable("IMU").getEntry("Roll").setNumber(ypr[2]);
+
+        table.getSubTable("Vision").getSubTable("Front Camera").getEntry("Target Center Coord").setNumber(rioduino.getTargetCenterCoord());
+        table.getSubTable("Vision").getSubTable("Front Camera").getEntry("Target Width").setNumber(rioduino.getTargetWidth());
+
+        table.getSubTable("Vision").getSubTable("Back Camera").getEntry("Target Center Coord").setNumber(cameraProcessor.getTargetCenterCoord());
+        table.getSubTable("Vision").getSubTable("Back Camera").getEntry("Target Width").setNumber(cameraProcessor.getTargetWidth());
     }
 
     /**

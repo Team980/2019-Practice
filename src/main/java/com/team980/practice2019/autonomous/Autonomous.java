@@ -5,11 +5,14 @@ import com.team980.practice2019.autonomous.subcommands.IMUTurn;
 import com.team980.practice2019.autonomous.subcommands.VisionTrack;
 import com.team980.practice2019.sensors.Rioduino;
 import com.team980.practice2019.subsystems.DriveSystem;
+import com.team980.practice2019.vision.BackCameraProcessor;
 import edu.wpi.first.wpilibj.command.CommandGroup;
+
+import static com.team980.practice2019.Parameters.*;
 
 public final class Autonomous extends CommandGroup {
 
-    private Autonomous(DriveSystem driveSystem, Rioduino rioduino, double[] ypr, Side side) {
+    private Autonomous(DriveSystem driveSystem, Rioduino rioduino, BackCameraProcessor cameraProcessor, double[] ypr, Side side) {
         super("Autonomous");
 
         // 1. Drive forward (time) until on slope of platform
@@ -26,7 +29,7 @@ public final class Autonomous extends CommandGroup {
         addSequential(new IMUTurn(driveSystem, ypr, -30 * side.invert));
 
         // 5.5. Use Pixy to drive to target (and score)
-        addSequential(new VisionTrack(driveSystem, rioduino));
+        addSequential(new VisionTrack(driveSystem, rioduino, AUTO_ROCKET_TARGET_SCORING_WIDTH));
 
         // 6. Back up short length
         addSequential(new EncoderMove(driveSystem, ypr, -2.5));
@@ -38,6 +41,7 @@ public final class Autonomous extends CommandGroup {
         addSequential(new EncoderMove(driveSystem, ypr, -10.0));
 
         // 8.5. Use Pixy to pick up from loading station
+        addSequential(new VisionTrack(driveSystem, cameraProcessor, AUTO_LOADING_STATION_TARGET_SCORING_WIDTH));
 
         // 9. Inch forward
 
@@ -68,16 +72,18 @@ public final class Autonomous extends CommandGroup {
 
         private DriveSystem driveSystem;
         private Rioduino rioduino;
+        private BackCameraProcessor cameraProcessor;
         private double[] ypr;
 
-        public Builder(DriveSystem driveSystem, Rioduino rioduino, double[] ypr) {
+        public Builder(DriveSystem driveSystem, Rioduino rioduino, BackCameraProcessor cameraProcessor, double[] ypr) {
             this.driveSystem = driveSystem;
             this.rioduino = rioduino;
+            this.cameraProcessor = cameraProcessor;
             this.ypr = ypr;
         }
 
         public Autonomous build(Side side) {
-            return new Autonomous(driveSystem, rioduino, ypr, side);
+            return new Autonomous(driveSystem, rioduino, cameraProcessor, ypr, side);
         }
     }
 }
