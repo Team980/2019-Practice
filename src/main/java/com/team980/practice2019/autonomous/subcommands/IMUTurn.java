@@ -15,8 +15,6 @@ public final class IMUTurn extends Command {
     private boolean isFinished = false;
 
     public IMUTurn(DriveSystem driveSystem, double[] ypr, double heading) {
-        super("IMUTurn: " + heading + " degrees");
-
         this.driveSystem = driveSystem;
         this.ypr = ypr;
 
@@ -25,7 +23,7 @@ public final class IMUTurn extends Command {
 
     @Override
     protected void initialize() {
-        //unused
+        System.out.println("IMUTurn: " + heading + " degrees");
     }
 
     @Override

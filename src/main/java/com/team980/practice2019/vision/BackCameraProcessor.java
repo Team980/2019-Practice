@@ -3,6 +3,8 @@ package com.team980.practice2019.vision;
 import io.github.pseudoresonance.pixy2api.Pixy2;
 import io.github.pseudoresonance.pixy2api.Pixy2CCC;
 
+import java.util.List;
+
 /**
  * Implements VisionDataProvider to calculate and provide data from the back Pixy.
  */
@@ -11,6 +13,7 @@ public class BackCameraProcessor implements VisionDataProvider {
     private static final int VISION_TARGET_SIGNATURE = 1;
 
     private Pixy2 pixy;
+    private List<Pixy2CCC.Block> blocks;
 
     private double targetCenterCoord = -1;
     private double targetWidth = -1;
@@ -18,23 +21,25 @@ public class BackCameraProcessor implements VisionDataProvider {
     public BackCameraProcessor() {
         pixy = Pixy2.createInstance(Pixy2.LinkType.SPI);
         pixy.init();
+
+        blocks = pixy.getCCC().getBlocks();
     }
 
     /**
      * Receives blocks from Pixy and updates the resulting data.
      */
     public void updateData() {
-        int numBlocks = pixy.getCCC().getBlocks(false, Pixy2CCC.CCC_SIG_ALL, 10);
+        int numBlocks = pixy.getCCC().getBlocks(false, Pixy2CCC.CCC_SIG1, 3); //10 causes an intermittent memory leak...
 
         if (numBlocks == 1) {
-            Pixy2CCC.Block target = pixy.getCCC().getBlocks().get(0);
+            Pixy2CCC.Block target = blocks.get(0);
 
             targetCenterCoord = target.getX();
             targetWidth = target.getWidth();
         } else if (numBlocks >= 2) {
             // WARNING: This does not check to make sure they are the correct signature!
-            Pixy2CCC.Block largestTarget = pixy.getCCC().getBlocks().get(0);
-            Pixy2CCC.Block secondLargestTarget = pixy.getCCC().getBlocks().get(1);
+            Pixy2CCC.Block largestTarget = blocks.get(0);
+            Pixy2CCC.Block secondLargestTarget = blocks.get(1);
 
             if (area(secondLargestTarget) > area(largestTarget)) {
                 // Swap the two blocks
@@ -44,7 +49,7 @@ public class BackCameraProcessor implements VisionDataProvider {
             }
 
             for (int i = 2; i < numBlocks; i++) {
-                Pixy2CCC.Block block = pixy.getCCC().getBlocks().get(i);
+                Pixy2CCC.Block block = blocks.get(i);
 
                 if (block.getSignature() == VISION_TARGET_SIGNATURE) {
                     if (area(block) > area(largestTarget)) {

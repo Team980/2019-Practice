@@ -45,8 +45,11 @@ public final class Parameters {
     public static final double AUTO_TURN_DIVISOR = 100.0;
     public static final double AUTO_TURN_THRESHOLD = 0.4; //in degrees
 
+    public static final double AUTO_FRONT_TRACKING_SPEED = 2.0; //in ft/sec
+    public static final double AUTO_BACK_TRACKING_SPEED = -2.0; //in ft/sec
     public static final double AUTO_LOADING_STATION_TARGET_SCORING_WIDTH = 200;
-    public static final double AUTO_ROCKET_TARGET_SCORING_WIDTH = 36;
+    public static final double AUTO_ROCKET_TARGET_SCORING_WIDTH = 200;
+
     public static final double AUTO_VISION_CORRECTION_DIVISOR = 80;
 
     // DRIVE SYSTEM: SPEED CONTROLLERS

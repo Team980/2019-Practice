@@ -12,34 +12,33 @@ public final class VisionTrack extends Command {
 
     private VisionDataProvider provider;
 
+    private final double followSpeed;
     private final double targetRange;
 
     private boolean isFinished = false;
 
-    public VisionTrack(DriveSystem driveSystem, VisionDataProvider provider, double targetRange) {
-        super("VisionTrack with provider " + provider.getSource());
-
+    public VisionTrack(DriveSystem driveSystem, VisionDataProvider provider, double followSpeed, double targetRange) {
         this.driveSystem = driveSystem;
         this.provider = provider;
 
+        this.followSpeed = followSpeed;
         this.targetRange = targetRange;
     }
 
     @Override
     protected void initialize() {
-        //unused
+        System.out.println("VisionTrack: Provider " + provider.getSource());
     }
 
     @Override
     protected void execute() {
         if (provider.getTargetWidth() < targetRange) { //this works???
 
-            var followSpeed = 2.0; //TODO ranging?
+            //TODO ranging?
+            //if (Math.abs(followSpeed) < AUTO_MIN_SPEED) followSpeed = Math.copySign(AUTO_MIN_SPEED, followSpeed);
+            //if (Math.abs(followSpeed) > AUTO_MAX_SPEED) followSpeed = Math.copySign(AUTO_MAX_SPEED, followSpeed);
 
-            if (Math.abs(followSpeed) < AUTO_MIN_SPEED) followSpeed = Math.copySign(AUTO_MIN_SPEED, followSpeed);
-            if (Math.abs(followSpeed) > AUTO_MAX_SPEED) followSpeed = Math.copySign(AUTO_MAX_SPEED, followSpeed);
-
-            var targetCenterOffset = provider.getTargetCenterCoord() - 160 - 35; // Normalize coordinates, account for off center
+            var targetCenterOffset = provider.getTargetCenterCoord() - 160 - 25; // Normalize coordinates, account for off center
             var turnSpeed = targetCenterOffset / AUTO_VISION_CORRECTION_DIVISOR;
 
             if (provider.getTargetCenterCoord() == -1) turnSpeed = 0; // No targets detected

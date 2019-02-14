@@ -17,8 +17,6 @@ public final class EncoderMove extends Command {
     private boolean isFinished = false;
 
     public EncoderMove(DriveSystem driveSystem, double[] ypr, double distance) {
-        super("EncoderMove: " + distance + " feet");
-
         this.driveSystem = driveSystem;
         this.ypr = ypr;
 
@@ -27,6 +25,8 @@ public final class EncoderMove extends Command {
 
     @Override
     protected void initialize() {
+        System.out.println("EncoderMove: " + distance + " feet");
+
         driveSystem.resetEncoders();
 
         initialHeading = ypr[0];
