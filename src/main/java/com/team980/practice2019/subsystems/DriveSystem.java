@@ -76,7 +76,7 @@ public final class DriveSystem {
     }
 
     public Gear getGear() {
-        return shifterSolenoid.get() ? Gear.HIGH : Gear.LOW;
+        return (shifterSolenoid.get() == Gear.LOW.solenoidValue) ? Gear.LOW : Gear.HIGH;
     }
 
     public void setGear(Gear gear) {
