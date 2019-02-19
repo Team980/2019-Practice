@@ -101,6 +101,21 @@ public final class Parameters {
     public static final double DRIVE_SHIFT_UP_POINT = 4.5; // in ft/sec
     public static final double DRIVE_SHIFT_DOWN_POINT = 4.0; // in ft/sec
 
+    // ROBOT ARM: SPEED CONTROLLERS
+    public static final int SHOULDER_CONTROLLER_CAN_ID = 11;
+    public static final int ELBOW_CONTROLLER_CAN_ID = 12;
+    public static final int WRIST_CONTROLLER_CAN_ID = 13;
+
+    // ROBOT ARM: MOTOR CONTROL
+    public static final double SHOULDER_DEADBAND = 5.0; //TODO
+    public static final double SHOULDER_MOTOR_SPEED = 0.2; //TODO
+
+    public static final double ELBOW_DEADBAND = 5.0; //TODO
+    public static final double ELBOW_MOTOR_SPEED = 0.2; //TODO
+
+    public static final double WRIST_DEADBAND = 5.0; //TODO
+    public static final double WRIST_MOTOR_SPEED = 0.2; //TODO
+
     // SENSORS
     public static final int IMU_CAN_ID = 0;
 

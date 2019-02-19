@@ -15,55 +15,65 @@ public final class Autonomous extends CommandGroup {
     private Autonomous(DriveSystem driveSystem, Rioduino rioduino, BackCameraProcessor cameraProcessor, double[] ypr, Side side) {
         super("Autonomous"); //TODO logging solution for Commands
 
-        // 1. Drive forward (time) until on slope of platform
+        // NOTE: Sections 1-4 are skipped, as they are physically impossible on the practice robot
+
+        // 1. Drive forward (1s) until on slope of platform
+        //addSequential(new TimedMove(driveSystem, ypr, 10.0, 1.0));
 
         // 2. Drive forward until IMU stabilizes
+        //addSequential(new TiltAwareMove(driveSystem, ypr, 5.0));
 
-        // 3. Turn to overshot angle
+        // 3. Hard brake for 0.25 seconds
+        //addSequential(new TimedMove(driveSystem, ypr, 0, 1.0));
+
+        // 4. Shift into low gear
+        //addSequential(new InstantCommand(() -> driveSystem.setGear(DriveSystem.Gear.LOW)));
+
+        // 5. Turn to overshot angle
         addSequential(new IMUTurn(driveSystem, ypr, -54.5 * side.invert));
 
-        // 4. Drive forward to midpoint
+        // 6. Drive forward to midpoint
         addSequential(new EncoderMove(driveSystem, ypr, 7.0));
 
-        // 5: Turn to face rocket
+        // 7: Turn to face rocket
         addSequential(new IMUTurn(driveSystem, ypr, -30 * side.invert));
 
-        // 5.5. Use Pixy to drive to target (and score)
+        // 8. Use Pixy to drive to target (and score)
         addSequential(new VisionTrack(driveSystem, rioduino,
                 AUTO_FRONT_TRACKING_SPEED, AUTO_ROCKET_TARGET_SCORING_WIDTH));
 
-        // 6. Back up short length
+        // 9. Back up short length
         addSequential(new EncoderMove(driveSystem, ypr, -2.5));
 
-        // 7. Turn to zero
+        // 10. Turn to zero
         addSequential(new IMUTurn(driveSystem, ypr, 0));
 
-        // 8. Drive to loading station
+        // 11. Drive to loading station
         addSequential(new EncoderMove(driveSystem, ypr, -10.0));
 
-        // 8.5. Use Pixy to pick up from loading station
+        // 12. Use Pixy to pick up from loading station
         addSequential(new VisionTrack(driveSystem, cameraProcessor,
                 AUTO_BACK_TRACKING_SPEED, AUTO_LOADING_STATION_TARGET_SCORING_WIDTH));
 
-        // 9. Inch forward
+        // 13. Inch forward
         addSequential(new EncoderMove(driveSystem, ypr, 3.0));
 
-        // 10. Turn to slight angle
+        // 14. Turn to slight angle
         addSequential(new IMUTurn(driveSystem, ypr, 7.5 * side.invert));
 
-        // 11. Drive to center of field
+        // 15. Drive to center of field
         addSequential(new EncoderMove(driveSystem, ypr, 20.0));
 
-        // 12. Turn to far side of rocket
+        // 16. Turn to far side of rocket
         addSequential(new IMUTurn(driveSystem, ypr, 45 * side.invert));
 
-        // 13. Drive towards rocket
+        // 17. Drive towards rocket
         addSequential(new EncoderMove(driveSystem, ypr, -3.0));
 
-        // 14. Turn directly to rocket
+        // 18. Turn directly to rocket
         addSequential(new IMUTurn(driveSystem, ypr, 30 * side.invert));
 
-        // 14.5. Use Pixy to score
+        // 19. Use Pixy to score
         addSequential(new VisionTrack(driveSystem, cameraProcessor,
                 AUTO_BACK_TRACKING_SPEED, AUTO_ROCKET_TARGET_SCORING_WIDTH));
     }

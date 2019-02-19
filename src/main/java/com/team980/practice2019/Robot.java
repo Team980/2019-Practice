@@ -44,6 +44,7 @@ import static com.team980.practice2019.Parameters.*;
  */
 public final class Robot extends TimedRobot {
 
+    @Deprecated
     private NetworkTable table;
 
     private Joystick driveStick;
@@ -58,6 +59,7 @@ public final class Robot extends TimedRobot {
     private BackCameraProcessor cameraProcessor;
 
     private DriveSystem driveSystem;
+    //TODO implement RobotArm
 
     private Autonomous.Builder autonomous;
 
