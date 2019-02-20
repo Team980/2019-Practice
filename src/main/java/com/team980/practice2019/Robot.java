@@ -51,10 +51,10 @@ public final class Robot extends TimedRobot {
     private Joystick driveWheel;
     private XboxController xboxController;
 
-    private Rioduino rioduino;
-
     private PigeonIMU imu;
     private double[] ypr; //Stores yaw/pitch/roll from IMU
+
+    private Rioduino rioduino;
 
     private BackCameraProcessor cameraProcessor;
 
@@ -75,16 +75,16 @@ public final class Robot extends TimedRobot {
         driveWheel = new Joystick(DRIVE_WHEEL_ID);
         xboxController = new XboxController(XBOX_CONTROLLER_ID);
 
-        rioduino = new Rioduino();
-
         imu = new PigeonIMU(IMU_CAN_ID);
         ypr = new double[3];
+
+        rioduino = new Rioduino();
 
         cameraProcessor = new BackCameraProcessor();
 
         driveSystem = new DriveSystem();
 
-        autonomous = new Autonomous.Builder(driveSystem, rioduino, cameraProcessor, ypr);
+        autonomous = new Autonomous.Builder(driveSystem, ypr, rioduino, cameraProcessor);
     }
 
     /**
@@ -92,8 +92,9 @@ public final class Robot extends TimedRobot {
      */
     @Override
     public void robotPeriodic() {
-        rioduino.updateData();
         imu.getYawPitchRoll(ypr);
+
+        rioduino.updateData();
 
         cameraProcessor.updateData();
 

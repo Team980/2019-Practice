@@ -12,7 +12,7 @@ import static com.team980.practice2019.Parameters.*;
 
 public final class Autonomous extends CommandGroup {
 
-    private Autonomous(DriveSystem driveSystem, Rioduino rioduino, BackCameraProcessor cameraProcessor, double[] ypr, Side side) {
+    private Autonomous(DriveSystem driveSystem, double[] ypr, Rioduino rioduino, BackCameraProcessor cameraProcessor, Side side) {
         super("Autonomous"); //TODO logging solution for Commands
 
         // NOTE: Sections 1-4 are skipped, as they are physically impossible on the practice robot
@@ -23,8 +23,8 @@ public final class Autonomous extends CommandGroup {
         // 2. Drive forward until IMU stabilizes
         //addSequential(new TiltAwareMove(driveSystem, ypr, 5.0));
 
-        // 3. Hard brake for 0.25 seconds
-        //addSequential(new TimedMove(driveSystem, ypr, 0, 1.0));
+        // 3. Instantaneous hard brake
+        //addSequential(new InstantCommand(() -> driveSystem.setSetpoints(0, 0)));
 
         // 4. Shift into low gear
         //addSequential(new InstantCommand(() -> driveSystem.setGear(DriveSystem.Gear.LOW)));
@@ -96,15 +96,15 @@ public final class Autonomous extends CommandGroup {
         private BackCameraProcessor cameraProcessor;
         private double[] ypr;
 
-        public Builder(DriveSystem driveSystem, Rioduino rioduino, BackCameraProcessor cameraProcessor, double[] ypr) {
+        public Builder(DriveSystem driveSystem, double[] ypr, Rioduino rioduino, BackCameraProcessor cameraProcessor) {
             this.driveSystem = driveSystem;
+            this.ypr = ypr;
             this.rioduino = rioduino;
             this.cameraProcessor = cameraProcessor;
-            this.ypr = ypr;
         }
 
         public Autonomous build(Side side) {
-            return new Autonomous(driveSystem, rioduino, cameraProcessor, ypr, side);
+            return new Autonomous(driveSystem, ypr, rioduino, cameraProcessor, side);
         }
     }
 }
