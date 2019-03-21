@@ -53,10 +53,10 @@ public final class Parameters {
     public static final double AUTO_VISION_CORRECTION_DIVISOR = 80;
 
     // DRIVE SYSTEM: SPEED CONTROLLERS
-    public static final int LEFT_TOP_DRIVE_CONTROLLER_CAN_ID = 3;
-    public static final int LEFT_BACK_DRIVE_CONTROLLER_CAN_ID = 2;
-    public static final int RIGHT_TOP_DRIVE_CONTROLLER_CAN_ID = 0;
-    public static final int RIGHT_BACK_DRIVE_CONTROLLER_CAN_ID = 1;
+    public static final int LEFT_TOP_DRIVE_CONTROLLER_CAN_ID = 0;
+    public static final int LEFT_BACK_DRIVE_CONTROLLER_CAN_ID = 1;
+    public static final int RIGHT_TOP_DRIVE_CONTROLLER_CAN_ID = 3;
+    public static final int RIGHT_BACK_DRIVE_CONTROLLER_CAN_ID = 2;
 
     // DRIVE SYSTEM: ENCODERS
     public static final int LEFT_DRIVE_ENCODER_CHANNEL_A = 6;
@@ -107,14 +107,48 @@ public final class Parameters {
     public static final int WRIST_CONTROLLER_CAN_ID = 13;
 
     // ROBOT ARM: MOTOR CONTROL
-    public static final double SHOULDER_DEADBAND = 5.0; //TODO
-    public static final double SHOULDER_MOTOR_SPEED = 0.2; //TODO
+    public static final double ARM_ENCODER_DEADBAND = 1.0;
 
-    public static final double ELBOW_DEADBAND = 5.0; //TODO
-    public static final double ELBOW_MOTOR_SPEED = 0.2; //TODO
+    public static final double MIN_SHOULDER_ANGLE = 70;
+    public static final double MAX_SHOULDER_ANGLE = 210;
 
-    public static final double WRIST_DEADBAND = 5.0; //TODO
-    public static final double WRIST_MOTOR_SPEED = 0.2; //TODO
+    public static final double MIN_SHOULDER_SPEED = 1.0; //in degrees/sec
+    public static final double MAX_SHOULDER_SPEED = 30.0; //in degrees/sec
+
+    public static final double SHOULDER_VELOCITY_DIVISOR = 180.0;
+    public static final double SHOULDER_PROPORTIONAL_COEFFICIENT = 0.00025;
+
+    public static final boolean INVERT_SHOULDER_MOTOR = true;
+
+    public static final double MIN_ELBOW_ANGLE = 90;
+    public static final double MAX_ELBOW_ANGLE = 180;
+
+    public static final double MIN_ELBOW_SPEED = 10.0; //in degrees/sec
+    public static final double MAX_ELBOW_SPEED = 50.0; //in degrees/sec
+
+    public static final double ELBOW_VELOCITY_DIVISOR = 180.0;
+    public static final double ELBOW_PROPORTIONAL_COEFFICIENT = 0.00025;
+
+    public static final boolean INVERT_ELBOW_MOTOR = true;
+
+    public static final double MIN_WRIST_ANGLE = 80;
+    public static final double MAX_WRIST_ANGLE = 300;
+
+    public static final double MIN_WRIST_SPEED = 10.0; //in degrees/sec
+    public static final double MAX_WRIST_SPEED = 60.0; //in degrees/sec
+
+    public static final double WRIST_VELOCITY_DIVISOR = 45.0;
+    public static final double WRIST_PROPORTIONAL_COEFFICIENT = 0.00025;
+
+    public static final boolean INVERT_WRIST_MOTOR = false;
+
+    // END EFFECTOR
+    public static final int INTAKE_CONTROLLER_CAN_ID = 15;
+    public static final int HATCH_GRABBER_SOLENOID_PCM_CHANNEL = 1;
+
+    public static final int INTAKE_DIRECTION_INVERT = 1;
+
+    public static final double INTAKE_CONTROLLER_DEADBAND = 0.1;
 
     // SENSORS
     public static final int IMU_CAN_ID = 0;

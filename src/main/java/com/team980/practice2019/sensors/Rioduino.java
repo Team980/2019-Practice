@@ -4,6 +4,7 @@ import com.team980.practice2019.vision.VisionDataProvider;
 import edu.wpi.first.wpilibj.I2C;
 
 import java.nio.ByteBuffer;
+import java.nio.ByteOrder;
 
 /**
  * Communicates with a Rioduino connected to the roboRIO via MXP.
@@ -15,14 +16,18 @@ import java.nio.ByteBuffer;
 public final class Rioduino implements VisionDataProvider {
 
     private static final int DEVICE_ADDRESS = 10;
-    private static final int BUFFER_SIZE = 16;
+    private static final int BUFFER_SIZE = 28;
 
     private I2C i2C;
 
     // Absolute Encoders
-    private int shoulderAngle; //TODO floating point!
-    private int elbowAngle; //TODO floating point!!
-    private int wristAngle; //TODO floating point!!!
+    private int shoulderValue;
+    private int elbowValue;
+    private int wristValue;
+
+    private float shoulderVelocity;
+    private float elbowVelocity;
+    private float wristVelocity;
 
     // Front Pixy
     private short targetCenterCoord;
@@ -39,19 +44,25 @@ public final class Rioduino implements VisionDataProvider {
 
         buffer.position(0);
 
-        shoulderAngle = buffer.getInt();
-        elbowAngle = buffer.getInt();
-        wristAngle = buffer.getInt();
+        shoulderValue = buffer.getInt();
+        elbowValue = buffer.getInt();
+        wristValue = buffer.getInt();
 
         targetCenterCoord = buffer.getShort();
         targetWidth = buffer.getShort();
+
+        buffer.order(ByteOrder.LITTLE_ENDIAN);
+
+        shoulderVelocity = buffer.getFloat();
+        elbowVelocity = buffer.getFloat();
+        wristVelocity = buffer.getFloat();
     }
 
-    public void sendCommand(Command command) {
+    /*public void sendCommand(Command command) {
         ByteBuffer buffer = ByteBuffer.allocate(1);
         buffer.put(command.id);
         i2C.writeBulk(buffer, 1);
-    }
+    }*/
 
     @Override
     public String getSource() {
@@ -62,24 +73,51 @@ public final class Rioduino implements VisionDataProvider {
      * <p>The angle of the arm's shoulder joint</p>
      * <p>Ranges from zero to 360</p>
      */
-    public int getShoulderAngle() {
-        return shoulderAngle;
+    public float getShoulderAngle() {
+        var angle = (shoulderValue * 360 / 4096.0f) - 0; //TODO Recenter zero
+        if (angle < 0) angle += 360;
+
+        return angle;
     }
 
     /**
      * <p>The angle of the arm's elbow joint</p>
      * <p>Ranges from zero to 360</p>
      */
-    public int getElbowAngle() {
-        return elbowAngle;
+    public float getElbowAngle() {
+        return (elbowValue * 360 / 4096.0f); //TODO do we need to recenter zero?
     }
 
     /**
      * <p>The angle of the arm's wrist joint</p>
      * <p>Ranges from zero to 360</p>
      */
-    public int getWristAngle() {
-        return wristAngle;
+    public float getWristAngle() {
+        var angle = (wristValue * 360 / 4096.0f) + 90; //TODO Recenter zero
+        if (angle > 360) angle -= 360;
+
+        return angle;
+    }
+
+    /**
+     * <p>The velocity of the arm's shoulder joint</p>
+     */
+    public float getShoulderVelocity() {
+        return shoulderVelocity;
+    }
+
+    /**
+     * <p>The velocity of the arm's elbow joint</p>
+     */
+    public float getElbowVelocity() {
+        return elbowVelocity;
+    }
+
+    /**
+     * <p>The velocity of the arm's wrist joint</p>
+     */
+    public float getWristVelocity() {
+        return wristVelocity;
     }
 
     /**
@@ -97,15 +135,15 @@ public final class Rioduino implements VisionDataProvider {
         return targetWidth;
     }
 
-    public enum Command {
+    /*public enum Command {
 
         @Deprecated //unimplemented
-                SET_MODE_COLOR_TRACKING((byte) 0);
+        SET_MODE_COLOR_TRACKING((byte) 0);
 
         private byte id;
 
         Command(byte id) {
             this.id = id;
         }
-    }
+    }*/
 }
