@@ -37,7 +37,7 @@ public final class VisionTrack extends Command {
     protected void execute() {
         if (provider.getTargetWidth() < targetRange) { //this works???
 
-            //TODO ranging?
+            //TODO adjust speed based on range?
             //if (Math.abs(followSpeed) < AUTO_MIN_SPEED) followSpeed = Math.copySign(AUTO_MIN_SPEED, followSpeed);
             //if (Math.abs(followSpeed) > AUTO_MAX_SPEED) followSpeed = Math.copySign(AUTO_MAX_SPEED, followSpeed);
 

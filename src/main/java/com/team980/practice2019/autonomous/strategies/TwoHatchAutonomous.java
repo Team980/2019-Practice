@@ -1,5 +1,6 @@
-package com.team980.practice2019.autonomous;
+package com.team980.practice2019.autonomous.strategies;
 
+import com.team980.practice2019.autonomous.Autonomous;
 import com.team980.practice2019.autonomous.subcommands.TiltAwareMove;
 import com.team980.practice2019.autonomous.subcommands.TimedMove;
 import com.team980.practice2019.sensors.Rioduino;
@@ -8,9 +9,9 @@ import com.team980.practice2019.subsystems.RobotArm;
 import edu.wpi.first.wpilibj.command.CommandGroup;
 import edu.wpi.first.wpilibj.command.InstantCommand;
 
-final class TwoHatchAutonomous extends CommandGroup implements Autonomous {
+public final class TwoHatchAutonomous extends CommandGroup {
 
-    TwoHatchAutonomous(DriveSystem driveSystem, RobotArm robotArm, double[] ypr, Rioduino rioduino, Autonomous.Side side) {
+    public TwoHatchAutonomous(DriveSystem driveSystem, RobotArm robotArm, double[] ypr, Rioduino rioduino, Autonomous.Side side) {
         super("TwoHatchAutonomous");
 
         // 1. Drive forward (1s) until on slope of platform
@@ -29,7 +30,7 @@ final class TwoHatchAutonomous extends CommandGroup implements Autonomous {
         // 4b. Disable arm security and return to stowed
         addSequential(new InstantCommand(() -> {
             robotArm.setSecurityEnabled(false);
-            robotArm.setPose(RobotArm.Pose.STOWED); //TODO MID_HATCH?
+            robotArm.setPose(RobotArm.Pose.STOWED);
         }));
 
 

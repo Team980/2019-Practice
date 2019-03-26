@@ -1,5 +1,6 @@
-package com.team980.practice2019.autonomous;
+package com.team980.practice2019.autonomous.strategies;
 
+import com.team980.practice2019.autonomous.Autonomous;
 import com.team980.practice2019.autonomous.subcommands.EncoderMove;
 import com.team980.practice2019.autonomous.subcommands.IMUTurn;
 import com.team980.practice2019.autonomous.subcommands.TiltAwareMove;
@@ -11,9 +12,9 @@ import com.team980.practice2019.subsystems.RobotArm;
 import edu.wpi.first.wpilibj.command.CommandGroup;
 import edu.wpi.first.wpilibj.command.InstantCommand;
 
-final class CargoShipAutonomous extends CommandGroup implements Autonomous {
+public final class CargoShipAutonomous extends CommandGroup {
 
-    CargoShipAutonomous(DriveSystem driveSystem, RobotArm robotArm, EndEffector endEffector, double[] ypr, Rioduino rioduino, Autonomous.Side side) {
+    public CargoShipAutonomous(DriveSystem driveSystem, RobotArm robotArm, EndEffector endEffector, double[] ypr, Rioduino rioduino, Autonomous.Side side) {
         super("CargoShipAutonomous");
 
         // 1. Drive forward (1s) until on slope of platform

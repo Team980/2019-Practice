@@ -33,12 +33,15 @@ import com.team980.practice2019.subsystems.RobotArm;
 import com.team980.practice2019.util.TeleopScheduler;
 import edu.wpi.first.networktables.NetworkTable;
 import edu.wpi.first.networktables.NetworkTableInstance;
-import edu.wpi.first.wpilibj.*;
+import edu.wpi.first.wpilibj.GenericHID;
+import edu.wpi.first.wpilibj.Joystick;
+import edu.wpi.first.wpilibj.TimedRobot;
+import edu.wpi.first.wpilibj.XboxController;
 import edu.wpi.first.wpilibj.command.Scheduler;
-import edu.wpi.first.wpilibj.livewindow.LiveWindow;
 import edu.wpi.first.wpilibj.shuffleboard.EventImportance;
 import edu.wpi.first.wpilibj.shuffleboard.Shuffleboard;
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 
 import static com.team980.practice2019.Parameters.*;
 
@@ -65,7 +68,8 @@ public final class Robot extends TimedRobot {
     private EndEffector endEffector;
 
     private Autonomous.Builder autonomous;
-    private SendableChooser<Autonomous.Side> sideChooser; //TODO choose Class as well!!
+    private SendableChooser<Autonomous.Side> sideChooser;
+    private SendableChooser<Autonomous.Strategy> strategyChooser;
 
     private TeleopScheduler teleopScheduler;
 
@@ -98,9 +102,15 @@ public final class Robot extends TimedRobot {
 
         sideChooser = new SendableChooser<>();
         sideChooser.addOption("Left", Autonomous.Side.LEFT);
-        sideChooser.addOption("Right", Autonomous.Side.RIGHT);
-        sideChooser.setName("Autonomous", "Side Selection");
-        LiveWindow.add(sideChooser);
+        sideChooser.setDefaultOption("Right", Autonomous.Side.RIGHT);
+        sideChooser.setName("Autonomous", "Side");
+        SmartDashboard.putData(sideChooser);
+
+        strategyChooser = new SendableChooser<>();
+        strategyChooser.addOption("Two Hatch", Autonomous.Strategy.TWO_HATCH);
+        strategyChooser.setDefaultOption("Cargo Ship", Autonomous.Strategy.CARGO_SHIP);
+        strategyChooser.setName("Autonomous", "Strategy");
+        SmartDashboard.putData(strategyChooser);
 
         teleopScheduler = new TeleopScheduler();
     }
@@ -122,14 +132,13 @@ public final class Robot extends TimedRobot {
         dataTable.getSubTable("Vision").getSubTable("Front Camera").getEntry("Target Center Coord").setNumber(rioduino.getTargetCenterCoord());
         dataTable.getSubTable("Vision").getSubTable("Front Camera").getEntry("Target Width").setNumber(rioduino.getTargetWidth());
 
-        if (sideChooser.getSelected() != null) {
-            dataTable.getSubTable("Autonomous").getEntry("Side").setString(sideChooser.getSelected().name());
-        } else {
-            dataTable.getSubTable("Autonomous").getEntry("Side").setString("NULL");
-        }
+        dataTable.getSubTable("Autonomous").getEntry("Side").setString(sideChooser.getSelected().name());
+        dataTable.getSubTable("Autonomous").getEntry("Strategy").setString(strategyChooser.getSelected().name());
 
         dataTable.getSubTable("Status Flags").getEntry("Tip Protection").setBoolean(tipProtectionEnabled);
         dataTable.getSubTable("Status Flags").getEntry("Auto Target").setBoolean(autoTargetEnabled);
+
+        dataTable.getSubTable("Status Flags").getEntry("Manual Arm Control").setBoolean(operatorBox.getRawButton(1)); //show switch state
 
         robotArm.updateData(dataTable);
     }
@@ -156,13 +165,7 @@ public final class Robot extends TimedRobot {
 
         endEffector.setHatchGrabberExtended(false);
 
-        Autonomous.Side side;
-        if (sideChooser.getSelected() != null) {
-            side = sideChooser.getSelected();
-        } else {
-            side = Autonomous.Side.RIGHT;
-        }
-        autonomous.buildCargoShip(Autonomous.Side.RIGHT).start(); //TODO don't hardcode these choices!
+        autonomous.build(sideChooser.getSelected(), strategyChooser.getSelected()).start();
     }
 
     /**
@@ -288,13 +291,13 @@ public final class Robot extends TimedRobot {
             robotArm.manualControl(0, xboxController.getY(GenericHID.Hand.kLeft),
                     xboxController.getY(GenericHID.Hand.kRight));
         } else {
-            robotArm.fineWristControl(xboxController.getY(GenericHID.Hand.kLeft) * 0.25); //TODO store as constant?
+            robotArm.fineWristControl(xboxController.getY(GenericHID.Hand.kLeft) * FINE_WRIST_CONTROL_COEFFICIENT);
             robotArm.automatedControl();
         }
 
         // Arm poses
         if (xboxController.getStickButtonPressed(GenericHID.Hand.kRight)) {
-            robotArm.setPose(RobotArm.Pose.STOWED_CARGO_PRELOAD); //STOWED
+            robotArm.setPose(RobotArm.Pose.STOWED_CARGO_PRELOAD); //STOWED?
 
         } else if (xboxController.getAButtonPressed()) {
             robotArm.setPose(RobotArm.Pose.LOW_ROCKET_HATCH);
@@ -317,10 +320,10 @@ public final class Robot extends TimedRobot {
         } else if (xboxController.getPOV() == 0) { //Up on d-pad
             robotArm.setPose(RobotArm.Pose.CARGO_SHIP_CARGO);
 
-        } else if ((xboxController.getPOV() == 270)) { // TODO move when elbow is fixed
+        } /*else if ((xboxController.getPOV() == 270)) { // TODO change button when elbow is fixed
             robotArm.setPose(RobotArm.Pose.LOADING_STATION_CARGO);
 
-        }
+        }*/
 
         // Cargo intake
         if (xboxController.getTriggerAxis(GenericHID.Hand.kRight) > INTAKE_CONTROLLER_DEADBAND) {

@@ -143,6 +143,8 @@ public final class Parameters {
 
     public static final boolean INVERT_WRIST_MOTOR = false;
 
+    public static final double FINE_WRIST_CONTROL_COEFFICIENT = 0.25;
+
     // END EFFECTOR
     public static final int INTAKE_CONTROLLER_CAN_ID = 15;
     public static final int HATCH_GRABBER_SOLENOID_PCM_CHANNEL = 1;
