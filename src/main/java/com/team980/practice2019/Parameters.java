@@ -34,6 +34,7 @@ public final class Parameters {
     public static final int DRIVE_STICK_ID = 0;
     public static final int DRIVE_WHEEL_ID = 1;
     public static final int XBOX_CONTROLLER_ID = 2;
+    public static final int OPERATOR_BOX_ID = 3;
 
     // AUTONOMOUS
     public static final double AUTO_MIN_SPEED = 0.75; //in ft/sec
@@ -92,8 +93,8 @@ public final class Parameters {
     public static final double HIGH_GEAR_DRIVE_STICK_COEFFICIENT = 25.5;
     public static final double HIGH_GEAR_DRIVE_STICK_OFFSET = 8.5;
 
-    public static final double DRIVE_WHEEL_DEADBAND = 0.1;
-    public static final double DRIVE_WHEEL_COEFFICIENT = 0.5;
+    public static final double DRIVE_WHEEL_DEADBAND = 0.05;
+    public static final double DRIVE_WHEEL_COEFFICIENT = 0.30;
 
     // DRIVE SYSTEM: SHIFTERS
     public static final int SHIFTER_SOLENOID_PCM_CHANNEL = 0;
@@ -120,11 +121,11 @@ public final class Parameters {
 
     public static final boolean INVERT_SHOULDER_MOTOR = true;
 
-    public static final double MIN_ELBOW_ANGLE = 90;
-    public static final double MAX_ELBOW_ANGLE = 180;
+    public static final double MIN_ELBOW_ANGLE = 25;
+    public static final double MAX_ELBOW_ANGLE = 130;
 
-    public static final double MIN_ELBOW_SPEED = 10.0; //in degrees/sec
-    public static final double MAX_ELBOW_SPEED = 50.0; //in degrees/sec
+    public static final double MIN_ELBOW_SPEED = 15.0; //in degrees/sec
+    public static final double MAX_ELBOW_SPEED = 70.0; //in degrees/sec
 
     public static final double ELBOW_VELOCITY_DIVISOR = 180.0;
     public static final double ELBOW_PROPORTIONAL_COEFFICIENT = 0.00025;
@@ -132,9 +133,9 @@ public final class Parameters {
     public static final boolean INVERT_ELBOW_MOTOR = true;
 
     public static final double MIN_WRIST_ANGLE = 80;
-    public static final double MAX_WRIST_ANGLE = 300;
+    public static final double MAX_WRIST_ANGLE = 320;
 
-    public static final double MIN_WRIST_SPEED = 10.0; //in degrees/sec
+    public static final double MIN_WRIST_SPEED = 15.0; //in degrees/sec
     public static final double MAX_WRIST_SPEED = 60.0; //in degrees/sec
 
     public static final double WRIST_VELOCITY_DIVISOR = 45.0;

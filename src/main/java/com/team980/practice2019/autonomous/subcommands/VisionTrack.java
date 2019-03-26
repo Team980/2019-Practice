@@ -3,6 +3,8 @@ package com.team980.practice2019.autonomous.subcommands;
 import com.team980.practice2019.subsystems.DriveSystem;
 import com.team980.practice2019.vision.VisionDataProvider;
 import edu.wpi.first.wpilibj.command.Command;
+import edu.wpi.first.wpilibj.shuffleboard.EventImportance;
+import edu.wpi.first.wpilibj.shuffleboard.Shuffleboard;
 
 import static com.team980.practice2019.Parameters.*;
 
@@ -27,7 +29,8 @@ public final class VisionTrack extends Command {
 
     @Override
     protected void initialize() {
-        System.out.println("VisionTrack: Provider " + provider.getSource());
+        Shuffleboard.addEventMarker("VisionTrack: provider " + provider.getSource(), EventImportance.kTrivial);
+        System.out.println("VisionTrack: provider " + provider.getSource());
     }
 
     @Override

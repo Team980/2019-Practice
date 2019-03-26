@@ -2,6 +2,8 @@ package com.team980.practice2019.autonomous.subcommands;
 
 import com.team980.practice2019.subsystems.DriveSystem;
 import edu.wpi.first.wpilibj.command.Command;
+import edu.wpi.first.wpilibj.shuffleboard.EventImportance;
+import edu.wpi.first.wpilibj.shuffleboard.Shuffleboard;
 
 import static com.team980.practice2019.Parameters.*;
 
@@ -25,7 +27,8 @@ public final class EncoderMove extends Command {
 
     @Override
     protected void initialize() {
-        System.out.println("EncoderMove: " + distance + " feet");
+        Shuffleboard.addEventMarker("EncoderMove: " + distance + " feet", EventImportance.kTrivial);
+        System.out.println("EncoderMove: " + distance + "feet");
 
         driveSystem.resetEncoders();
 

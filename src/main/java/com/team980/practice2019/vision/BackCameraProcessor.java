@@ -8,6 +8,7 @@ import java.util.List;
 /**
  * Implements VisionDataProvider to calculate and provide data from the back Pixy.
  */
+@Deprecated //We're probably not going to use the rear camera this season.
 public class BackCameraProcessor implements VisionDataProvider {
 
     private static final int VISION_TARGET_SIGNATURE = 1;
