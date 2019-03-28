@@ -60,13 +60,13 @@ public final class Parameters {
     public static final int RIGHT_BACK_DRIVE_CONTROLLER_CAN_ID = 2;
 
     // DRIVE SYSTEM: ENCODERS
-    public static final int LEFT_DRIVE_ENCODER_CHANNEL_A = 6;
-    public static final int LEFT_DRIVE_ENCODER_CHANNEL_B = 7;
+    public static final int LEFT_DRIVE_ENCODER_CHANNEL_A = 8;
+    public static final int LEFT_DRIVE_ENCODER_CHANNEL_B = 9;
     public static final boolean INVERT_LEFT_DRIVE_ENCODER = false;
 
-    public static final int RIGHT_DRIVE_ENCODER_CHANNEL_A = 8;
-    public static final int RIGHT_DRIVE_ENCODER_CHANNEL_B = 9;
-    public static final boolean INVERT_RIGHT_DRIVE_ENCODER = true;
+    public static final int RIGHT_DRIVE_ENCODER_CHANNEL_A = 6;
+    public static final int RIGHT_DRIVE_ENCODER_CHANNEL_B = 7;
+    public static final boolean INVERT_RIGHT_DRIVE_ENCODER = false;
 
     public static final double DRIVE_ENCODER_PULSES_PER_REVOLUTION = 2048.0;
 
@@ -86,7 +86,7 @@ public final class Parameters {
     public static final double DRIVE_PID_TOLERANCE = 0.01;
 
     // DRIVE SYSTEM: INPUT MODIFIERS
-    public static final double DRIVE_STICK_DEADBAND = 0.05;
+    public static final double DRIVE_STICK_DEADBAND = 0.1;
     public static final double DRIVE_STICK_SHIFT_POINT = 0.5;
 
     public static final double LOW_GEAR_DRIVE_STICK_COEFFICIENT = 8.5;
@@ -97,7 +97,7 @@ public final class Parameters {
     public static final double DRIVE_WHEEL_COEFFICIENT = 0.30;
 
     // DRIVE SYSTEM: SHIFTERS
-    public static final int SHIFTER_SOLENOID_PCM_CHANNEL = 0;
+    public static final int SHIFTER_SOLENOID_PCM_CHANNEL = 5; //Easier to reach
 
     public static final double DRIVE_SHIFT_UP_POINT = 4.5; // in ft/sec
     public static final double DRIVE_SHIFT_DOWN_POINT = 4.0; // in ft/sec

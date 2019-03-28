@@ -30,7 +30,7 @@ public final class TwoHatchAutonomous extends CommandGroup {
         // 4b. Disable arm security and return to stowed
         addSequential(new InstantCommand(() -> {
             robotArm.setSecurityEnabled(false);
-            robotArm.setPose(RobotArm.Pose.STOWED);
+            robotArm.setPose(RobotArm.Pose.STOWED_CARGO_PRELOAD); //TODO STOWED_HATCH
         }));
 
 

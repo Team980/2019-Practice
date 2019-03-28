@@ -250,7 +250,7 @@ public final class Robot extends TimedRobot {
         // Robot drive - handles all override moves
         if (tipProtectionEnabled) { // Tipping protection overrides driver input
             autoTargetEnabled = false;
-            driveSystem.arcadeDrive(Math.copySign(0.4, ypr[1]), 0);
+            driveSystem.arcadeDrive(Math.copySign(3.0, ypr[1]), 0); //TODO tune this if we need it
         } else if (autoTargetEnabled) {
             var targetCenterOffset = rioduino.getTargetCenterCoord() - 160 - 25; // Normalize coordinates, account for off center
             var turnSpeed = targetCenterOffset / AUTO_VISION_CORRECTION_DIVISOR;
@@ -314,16 +314,16 @@ public final class Robot extends TimedRobot {
         } else if (xboxController.getPOV() == 90) { //Right on d-pad
             robotArm.setPose(RobotArm.Pose.MID_ROCKET_CARGO);
 
-        /*} else if (xboxController.getPOV() == 270) { //Left on d-pad
-            robotArm.setPose(RobotArm.Pose.FLOOR_CARGO_PICKUP);*/
+        } else if (xboxController.getPOV() == 270) { //Left on d-pad
+            robotArm.setPose(RobotArm.Pose.LOADING_STATION_CARGO);
 
         } else if (xboxController.getPOV() == 0) { //Up on d-pad
             robotArm.setPose(RobotArm.Pose.CARGO_SHIP_CARGO);
 
-        } /*else if ((xboxController.getPOV() == 270)) { // TODO change button when elbow is fixed
-            robotArm.setPose(RobotArm.Pose.LOADING_STATION_CARGO);
+        } else if (xboxController.getStartButtonPressed()) {
+            robotArm.setPose(RobotArm.Pose.FLOOR_CARGO_PICKUP);
 
-        }*/
+        }
 
         // Cargo intake
         if (xboxController.getTriggerAxis(GenericHID.Hand.kRight) > INTAKE_CONTROLLER_DEADBAND) {

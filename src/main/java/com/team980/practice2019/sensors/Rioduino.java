@@ -85,7 +85,7 @@ public final class Rioduino implements VisionDataProvider {
      * <p>Ranges from zero to 360</p>
      */
     public float getElbowAngle() {
-        var angle = (elbowValue * 360 / 4096.0f) - 149;
+        var angle = (elbowValue * 360 / 4096.0f) - 267;
         if (angle < 0) angle += 360;
 
         return angle;

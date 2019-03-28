@@ -23,7 +23,7 @@ public class RobotArm {
     private State elbowState = State.STOPPED;
     private State wristState = State.STOPPED;
 
-    private Pose pose = Pose.STOWED;
+    private Pose pose = Pose.STOWED_CARGO_PRELOAD;
 
     private int[] stictionBuffer;
     private double[] voltageBuffer;
@@ -54,7 +54,7 @@ public class RobotArm {
         elbowState = State.STOPPED;
         wristState = State.STOPPED;
 
-        pose = Pose.STOWED;
+        pose = Pose.STOWED_CARGO_PRELOAD;
     }
 
     public void updateData(NetworkTable dataTable) {
@@ -165,7 +165,7 @@ public class RobotArm {
                 var velocityDelta = desiredVelocity - shoulderVelocity;
                 voltageBuffer[0] += (velocityDelta * SHOULDER_PROPORTIONAL_COEFFICIENT);
 
-                if (Math.abs(voltageBuffer[0]) > 1.0) voltageBuffer[2] = Math.copySign(1.0, voltageBuffer[0]);
+                if (Math.abs(voltageBuffer[0]) > 1.0) voltageBuffer[0] = Math.copySign(1.0, voltageBuffer[0]);
 
                 if (Math.abs(positionDelta) > ARM_ENCODER_DEADBAND) {
                     shoulderMotor.set(voltageBuffer[0]);
@@ -190,7 +190,7 @@ public class RobotArm {
             var velocityDelta = desiredVelocity - elbowVelocity;
             voltageBuffer[1] += (velocityDelta * ELBOW_PROPORTIONAL_COEFFICIENT);
 
-            if (Math.abs(voltageBuffer[1]) > 1.0) voltageBuffer[2] = Math.copySign(1.0, voltageBuffer[1]);
+            if (Math.abs(voltageBuffer[1]) > 1.0) voltageBuffer[1] = Math.copySign(1.0, voltageBuffer[1]);
 
             if (Math.abs(positionDelta) > ARM_ENCODER_DEADBAND) {
                 elbowMotor.set(voltageBuffer[1]);
@@ -261,7 +261,7 @@ public class RobotArm {
     }
 
     public enum Pose {
-        STOWED(-1, 34, 302), //TODO hatch?
+        //STOWED(-1, 34, 302), //TODO hatch?
         STOWED_CARGO_PRELOAD(-1, 42, 310),
 
         MID_ROCKET_HATCH(-1, 48, 224),
