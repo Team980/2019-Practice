@@ -131,7 +131,12 @@ public class RobotArm {
 
         // Fetch angular joint velocities
         var shoulderVelocity = rioduino.getShoulderVelocity();
+
         var elbowVelocity = rioduino.getElbowVelocity();
+        if (Math.abs(elbowVelocity) > MAX_ELBOW_SPEED) { // We travel through the zero point - fix that
+            elbowVelocity = (float) Math.copySign(MAX_ELBOW_SPEED, elbowVelocity);
+        }
+
         var wristVelocity = rioduino.getWristVelocity();
 
         // Deactivate automated control if we exit our bounds

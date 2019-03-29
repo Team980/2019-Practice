@@ -122,12 +122,12 @@ public final class Parameters {
     public static final boolean INVERT_SHOULDER_MOTOR = true;
 
     public static final double MIN_ELBOW_ANGLE = 25;
-    public static final double MAX_ELBOW_ANGLE = 130;
+    public static final double MAX_ELBOW_ANGLE = 140;
 
-    public static final double MIN_ELBOW_SPEED = 15.0; //in degrees/sec
-    public static final double MAX_ELBOW_SPEED = 70.0; //in degrees/sec
+    public static final double MIN_ELBOW_SPEED = 25.0; //in degrees/sec
+    public static final double MAX_ELBOW_SPEED = 60.0; //in degrees/sec
 
-    public static final double ELBOW_VELOCITY_DIVISOR = 180.0;
+    public static final double ELBOW_VELOCITY_DIVISOR = 90.0;
     public static final double ELBOW_PROPORTIONAL_COEFFICIENT = 0.00025;
 
     public static final boolean INVERT_ELBOW_MOTOR = true;

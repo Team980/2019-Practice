@@ -295,6 +295,11 @@ public final class Robot extends TimedRobot {
             robotArm.automatedControl();
         }
 
+        // Stop arm control with red button
+        if (operatorBox.getRawButtonPressed(4)) {
+            robotArm.disable();
+        }
+
         // Arm poses
         if (xboxController.getStickButtonPressed(GenericHID.Hand.kRight)) {
             robotArm.setPose(RobotArm.Pose.STOWED_CARGO_PRELOAD); //STOWED?
