@@ -320,12 +320,9 @@ public final class Robot extends TimedRobot {
             robotArm.setPose(RobotArm.Pose.MID_ROCKET_CARGO);
 
         } else if (xboxController.getPOV() == 270) { //Left on d-pad
-            robotArm.setPose(RobotArm.Pose.LOADING_STATION_CARGO);
-
-        } else if (xboxController.getPOV() == 0) { //Up on d-pad
             robotArm.setPose(RobotArm.Pose.CARGO_SHIP_CARGO);
 
-        } else if (xboxController.getStartButtonPressed()) {
+        }  else if (xboxController.getStartButtonPressed()) {
             robotArm.setPose(RobotArm.Pose.FLOOR_CARGO_PICKUP);
 
         }

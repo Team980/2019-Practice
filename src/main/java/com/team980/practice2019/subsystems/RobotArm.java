@@ -278,9 +278,7 @@ public class RobotArm {
         FLOOR_HATCH_PICKUP(-1, 127, 217),
         FLOOR_CARGO_PICKUP(-1, 104, 119),
 
-        CARGO_SHIP_CARGO(-1, 38, 85),
-
-        LOADING_STATION_CARGO(-1, 38, 115);
+        CARGO_SHIP_CARGO(-1, 38, 107);
 
         double shoulderAngle;
         double elbowAngle;
