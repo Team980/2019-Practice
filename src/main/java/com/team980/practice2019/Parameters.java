@@ -89,11 +89,13 @@ public final class Parameters {
     public static final double DRIVE_STICK_DEADBAND = 0.1;
     public static final double DRIVE_STICK_SHIFT_POINT = 0.5;
 
-    public static final double LOW_GEAR_DRIVE_STICK_COEFFICIENT = 8.5;
+    public static final double LOW_GEAR_DRIVE_STICK_COEFFICIENT = 10.625;
+    public static final double LOW_GEAR_DRIVE_STICK_OFFSET = -1.0625;
+
     public static final double HIGH_GEAR_DRIVE_STICK_COEFFICIENT = 25.5;
     public static final double HIGH_GEAR_DRIVE_STICK_OFFSET = 8.5;
 
-    public static final double DRIVE_WHEEL_DEADBAND = 0.05;
+    public static final double DRIVE_WHEEL_DEADBAND = 0.1;
     public static final double DRIVE_WHEEL_COEFFICIENT = 0.30;
 
     // DRIVE SYSTEM: SHIFTERS

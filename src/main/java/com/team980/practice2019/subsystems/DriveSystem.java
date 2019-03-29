@@ -130,29 +130,33 @@ public final class DriveSystem {
         runAutoShift();
     }
 
-    /**
-     * @param left  Requested left command, from -1 to 1
-     * @param right Requested right command, from -1 to 1
-     */
     public void tankDrive(double left, double right) {
-        if (Math.abs(left) < DRIVE_STICK_DEADBAND) left = 0;
-        if (Math.abs(right) < DRIVE_STICK_DEADBAND) right = 0;
-
         if (isPIDEnabled()) {
             if (Math.abs(left) > DRIVE_STICK_SHIFT_POINT) {
-                left = (left * HIGH_GEAR_DRIVE_STICK_COEFFICIENT) - HIGH_GEAR_DRIVE_STICK_OFFSET;
+                left = (left * HIGH_GEAR_DRIVE_STICK_COEFFICIENT) - Math.copySign(HIGH_GEAR_DRIVE_STICK_OFFSET, left);
+
+            } else if (Math.abs(left) > DRIVE_STICK_DEADBAND) {
+                left = (left * LOW_GEAR_DRIVE_STICK_COEFFICIENT) - Math.copySign(LOW_GEAR_DRIVE_STICK_OFFSET, left);
+
             } else {
-                left *= LOW_GEAR_DRIVE_STICK_COEFFICIENT;
+                left = 0;
             }
 
             if (Math.abs(right) > DRIVE_STICK_SHIFT_POINT) {
-                right = (right * HIGH_GEAR_DRIVE_STICK_COEFFICIENT) - HIGH_GEAR_DRIVE_STICK_OFFSET;
+                right = (right * HIGH_GEAR_DRIVE_STICK_COEFFICIENT) - Math.copySign(HIGH_GEAR_DRIVE_STICK_OFFSET, right);
+
+            } else if (Math.abs(right) > DRIVE_STICK_DEADBAND) {
+                right = (right * LOW_GEAR_DRIVE_STICK_COEFFICIENT) - Math.copySign(LOW_GEAR_DRIVE_STICK_OFFSET, right);
+
             } else {
-                right *= LOW_GEAR_DRIVE_STICK_COEFFICIENT;
+                right = 0;
             }
 
             setSetpoints(left, right);
         } else {
+            if (Math.abs(left) < DRIVE_STICK_DEADBAND) left = 0;
+            if (Math.abs(right) < DRIVE_STICK_DEADBAND) right = 0;
+
             leftDrive.set(left);
             rightDrive.set(right);
 
