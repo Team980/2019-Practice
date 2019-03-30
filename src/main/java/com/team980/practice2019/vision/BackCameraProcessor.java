@@ -82,6 +82,11 @@ public class BackCameraProcessor implements VisionDataProvider {
         return targetCenterCoord;
     }
 
+    @Override
+    public double getTargetCenterOffset() {
+        return targetCenterCoord - 160 - 25; //Configure if we resurrect back pixy
+    }
+
     public double getTargetWidth() {
         return targetWidth;
     }

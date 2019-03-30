@@ -107,8 +107,9 @@ public final class Robot extends TimedRobot {
         SmartDashboard.putData(sideChooser);
 
         strategyChooser = new SendableChooser<>();
-        strategyChooser.addOption("Two Hatch", Autonomous.Strategy.TWO_HATCH);
         strategyChooser.setDefaultOption("Cargo Ship", Autonomous.Strategy.CARGO_SHIP);
+        strategyChooser.addOption("Cargo Ship + Fetch", Autonomous.Strategy.CARGO_SHIP_PLUS_FETCH);
+        //strategyChooser.addOption("Rocket Hatch", Autonomous.Strategy.TWO_HATCH); TODO do we want to run hatch auto?
         strategyChooser.setName("Autonomous", "Strategy");
         SmartDashboard.putData(strategyChooser);
 
@@ -130,6 +131,7 @@ public final class Robot extends TimedRobot {
         dataTable.getSubTable("IMU").getEntry("Roll").setNumber(ypr[2]);
 
         dataTable.getSubTable("Vision").getSubTable("Front Camera").getEntry("Target Center Coord").setNumber(rioduino.getTargetCenterCoord());
+        dataTable.getSubTable("Vision").getSubTable("Front Camera").getEntry("Target Center Offset").setNumber(rioduino.getTargetCenterOffset());
         dataTable.getSubTable("Vision").getSubTable("Front Camera").getEntry("Target Width").setNumber(rioduino.getTargetWidth());
 
         dataTable.getSubTable("Autonomous").getEntry("Side").setString(sideChooser.getSelected().name());
@@ -252,22 +254,29 @@ public final class Robot extends TimedRobot {
             autoTargetEnabled = false;
             driveSystem.arcadeDrive(Math.copySign(3.0, ypr[1]), 0); //TODO tune this if we need it
         } else if (autoTargetEnabled) {
-            var targetCenterOffset = rioduino.getTargetCenterCoord() - 160 - 25; // Normalize coordinates, account for off center
-            var turnSpeed = targetCenterOffset / AUTO_VISION_CORRECTION_DIVISOR;
+            var driveSpeed = 1.0; //in ft/sec
+            var turnSpeed = rioduino.getTargetCenterOffset() / AUTO_VISION_CORRECTION_DIVISOR;
 
             if (rioduino.getTargetCenterCoord() == -1) {
                 autoTargetEnabled = false;
                 turnSpeed = 0; // No targets detected
             }
 
-            if (Math.abs(targetCenterOffset) < 2.0) {
+            if (Math.abs(rioduino.getTargetWidth()) >= AUTO_LOADING_STATION_TARGET_SCORING_WIDTH) {
                 autoTargetEnabled = false;
                 turnSpeed = 0; // Target locked
             }
 
-            driveSystem.setSetpoints(turnSpeed, -turnSpeed);
+            driveSystem.setSetpoints(driveSpeed + turnSpeed, driveSpeed - turnSpeed);
         } else {
             driveSystem.arcadeDrive(-driveStick.getY(), driveWheel.getX());
+        }
+
+        // Auto target activation
+        if (driveStick.getRawButton(10)) {
+            autoTargetEnabled = true;
+        } else {
+            autoTargetEnabled = false;
         }
 
         // Tip protection activation
@@ -302,7 +311,7 @@ public final class Robot extends TimedRobot {
 
         // Arm poses
         if (xboxController.getStickButtonPressed(GenericHID.Hand.kRight)) {
-            robotArm.setPose(RobotArm.Pose.STOWED_CARGO_PRELOAD); //STOWED?
+            robotArm.setPose(RobotArm.Pose.STOWED); //STOWED?
 
         } else if (xboxController.getAButtonPressed()) {
             robotArm.setPose(RobotArm.Pose.LOW_ROCKET_HATCH);

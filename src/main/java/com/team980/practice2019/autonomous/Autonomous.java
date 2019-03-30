@@ -1,7 +1,8 @@
 package com.team980.practice2019.autonomous;
 
 import com.team980.practice2019.autonomous.strategies.CargoShipAutonomous;
-import com.team980.practice2019.autonomous.strategies.TwoHatchAutonomous;
+import com.team980.practice2019.autonomous.strategies.CargoShipPlusFetchAutonomous;
+import com.team980.practice2019.autonomous.strategies.RocketHatchAutonomous;
 import com.team980.practice2019.sensors.Rioduino;
 import com.team980.practice2019.subsystems.DriveSystem;
 import com.team980.practice2019.subsystems.EndEffector;
@@ -23,7 +24,8 @@ public abstract class Autonomous {
 
     public enum Strategy {
         TWO_HATCH,
-        CARGO_SHIP
+        CARGO_SHIP,
+        CARGO_SHIP_PLUS_FETCH
     }
 
     public static final class Builder {
@@ -45,9 +47,11 @@ public abstract class Autonomous {
         public CommandGroup build(Side side, Strategy strategy) {
             switch (strategy) {
                 case TWO_HATCH:
-                    return new TwoHatchAutonomous(driveSystem, robotArm, ypr, rioduino, side);
+                    return new RocketHatchAutonomous(driveSystem, robotArm, ypr, rioduino, side);
                 case CARGO_SHIP:
                     return new CargoShipAutonomous(driveSystem, robotArm, endEffector, ypr, rioduino, side);
+                case CARGO_SHIP_PLUS_FETCH:
+                    return new CargoShipPlusFetchAutonomous(driveSystem, robotArm, endEffector, ypr, rioduino, side);
                 default:
                     return build(side, Strategy.CARGO_SHIP); //Catch null and return default
             }

@@ -38,12 +38,12 @@ public final class Parameters {
 
     // AUTONOMOUS
     public static final double AUTO_MIN_SPEED = 0.75; //in ft/sec
-    public static final double AUTO_MAX_SPEED = 4.0; //in ft/sec
+    public static final double AUTO_MAX_SPEED = 3.5; //in ft/sec
 
-    public static final double AUTO_MOVE_DIVISOR = 0.5;
+    public static final double AUTO_MOVE_DIVISOR = 0.75;
     public static final double AUTO_TURN_CORRECTION_DIVISOR = 15;
 
-    public static final double AUTO_TURN_DIVISOR = 100.0;
+    public static final double AUTO_TURN_DIVISOR = 150.0;
     public static final double AUTO_TURN_THRESHOLD = 0.4; //in degrees
 
     public static final double AUTO_FRONT_TRACKING_SPEED = 2.0; //in ft/sec
@@ -51,7 +51,7 @@ public final class Parameters {
     public static final double AUTO_LOADING_STATION_TARGET_SCORING_WIDTH = 200;
     public static final double AUTO_ROCKET_TARGET_SCORING_WIDTH = 200;
 
-    public static final double AUTO_VISION_CORRECTION_DIVISOR = 80;
+    public static final double AUTO_VISION_CORRECTION_DIVISOR = 120;
 
     // DRIVE SYSTEM: SPEED CONTROLLERS
     public static final int LEFT_TOP_DRIVE_CONTROLLER_CAN_ID = 0;
@@ -90,7 +90,7 @@ public final class Parameters {
     public static final double DRIVE_STICK_SHIFT_POINT = 0.5;
 
     public static final double LOW_GEAR_DRIVE_STICK_COEFFICIENT = 10.625;
-    public static final double LOW_GEAR_DRIVE_STICK_OFFSET = -1.0625;
+    public static final double LOW_GEAR_DRIVE_STICK_OFFSET = 1.0625;
 
     public static final double HIGH_GEAR_DRIVE_STICK_COEFFICIENT = 25.5;
     public static final double HIGH_GEAR_DRIVE_STICK_OFFSET = 8.5;
