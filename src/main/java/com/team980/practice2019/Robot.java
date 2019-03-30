@@ -132,6 +132,8 @@ public final class Robot extends TimedRobot {
         dataTable.getSubTable("Vision").getSubTable("Front Camera").getEntry("Target Center Coord").setNumber(rioduino.getTargetCenterCoord());
         dataTable.getSubTable("Vision").getSubTable("Front Camera").getEntry("Target Width").setNumber(rioduino.getTargetWidth());
 
+        dataTable.getSubTable("Ultrasonic Rangefinder").getEntry("Value").setNumber(rioduino.getRange());
+
         dataTable.getSubTable("Autonomous").getEntry("Side").setString(sideChooser.getSelected().name());
         dataTable.getSubTable("Autonomous").getEntry("Strategy").setString(strategyChooser.getSelected().name());
 

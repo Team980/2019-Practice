@@ -16,7 +16,7 @@ import java.nio.ByteOrder;
 public final class Rioduino implements VisionDataProvider {
 
     private static final int DEVICE_ADDRESS = 10;
-    private static final int BUFFER_SIZE = 28;
+    private static final int BUFFER_SIZE = 30;
 
     private I2C i2C;
 
@@ -32,6 +32,9 @@ public final class Rioduino implements VisionDataProvider {
     // Front Pixy
     private short targetCenterCoord;
     private short targetWidth;
+
+    // Ultrasonic Rangefinder
+    private short range;
 
     public Rioduino() {
         i2C = new I2C(I2C.Port.kMXP, DEVICE_ADDRESS);
@@ -50,6 +53,7 @@ public final class Rioduino implements VisionDataProvider {
 
         targetCenterCoord = buffer.getShort();
         targetWidth = buffer.getShort();
+        range = buffer.getShort();
 
         buffer.order(ByteOrder.LITTLE_ENDIAN);
 
@@ -136,6 +140,14 @@ public final class Rioduino implements VisionDataProvider {
      */
     public double getTargetWidth() {
         return targetWidth;
+    }
+
+    /**
+     * <p>The distance reported by the ultrasonic rangefinder, in inches</p>
+     * <p>Ranges from 0 to 255</p>
+     */
+    public int getRange() {
+        return range;
     }
 
     /*public enum Command {
