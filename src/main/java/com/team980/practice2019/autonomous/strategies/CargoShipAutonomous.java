@@ -3,7 +3,6 @@ package com.team980.practice2019.autonomous.strategies;
 import com.team980.practice2019.autonomous.Autonomous;
 import com.team980.practice2019.autonomous.subcommands.EncoderMove;
 import com.team980.practice2019.autonomous.subcommands.IMUTurn;
-import com.team980.practice2019.autonomous.subcommands.TimedMove;
 import com.team980.practice2019.sensors.Rioduino;
 import com.team980.practice2019.subsystems.DriveSystem;
 import com.team980.practice2019.subsystems.EndEffector;
@@ -52,12 +51,12 @@ public final class CargoShipAutonomous extends CommandGroup {
         addSequential(new EncoderMove(driveSystem, ypr, 1.5));
 
         // Score!
-        addSequential(new InstantCommand(() -> endEffector.setIntake(EndEffector.IntakeDirection.OUT, 0.5)));
+        //addSequential(new InstantCommand(() -> endEffector.setIntake(EndEffector.IntakeDirection.OUT, 0.5)));
 
         // Wait a second
-        addSequential(new TimedMove(driveSystem, ypr, 0.0, 1.0)); //Stop in place
+        //addSequential(new TimedMove(driveSystem, ypr, 0.0, 1.0)); //Stop in place
 
         // Shut off intakes
-        addSequential(new InstantCommand(() -> endEffector.setIntake(EndEffector.IntakeDirection.STOPPED, 0.0)));
+        //addSequential(new InstantCommand(() -> endEffector.setIntake(EndEffector.IntakeDirection.STOPPED, 0.0)));
     }
 }

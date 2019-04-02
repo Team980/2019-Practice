@@ -2,12 +2,15 @@ package com.team980.practice2019.subsystems;
 
 import com.ctre.phoenix.motorcontrol.can.WPI_TalonSRX;
 import edu.wpi.first.wpilibj.*;
+import edu.wpi.first.wpilibj.drive.DifferentialDrive;
 import edu.wpi.first.wpilibj.livewindow.LiveWindow;
 
 import static com.team980.practice2019.Parameters.*;
 
 /**
  * Implements velocity control for our West Coast drive system.
+ * <p>
+ * Note: Much of the non-PID control logic is ported from the {@link DifferentialDrive} class
  */
 public final class DriveSystem {
 
@@ -101,7 +104,7 @@ public final class DriveSystem {
     }
 
     /**
-     * Separated so it can run in both auto and teleop
+     * Separated so it can run in both auto and teleop (not that we're even doing that right now!)
      */
     private void runAutoShift() {
         if (isAutoShiftEnabled) {
@@ -126,59 +129,143 @@ public final class DriveSystem {
     public void setSetpoints(double left, double right) {
         leftController.setSetpoint(left);
         rightController.setSetpoint(right);
+    }
+
+    /**
+     * @param left Requested left drive command, from -1 to 1
+     * @param right Requested right drive command, from -1 to 1
+     */
+    private void velocityControl(double left, double right) {
+        if (Math.abs(left) > DRIVE_STICK_SHIFT_POINT) {
+            left = (left * HIGH_GEAR_DRIVE_STICK_COEFFICIENT) - Math.copySign(HIGH_GEAR_DRIVE_STICK_OFFSET, left);
+        } else {
+            left *= LOW_GEAR_DRIVE_STICK_COEFFICIENT;
+        }
+
+        if (Math.abs(right) > DRIVE_STICK_SHIFT_POINT) {
+            right = (right * HIGH_GEAR_DRIVE_STICK_COEFFICIENT) - Math.copySign(HIGH_GEAR_DRIVE_STICK_OFFSET, right);
+        } else {
+            right *= LOW_GEAR_DRIVE_STICK_COEFFICIENT;
+        }
+
+        setSetpoints(left, right);
+    }
+
+    /**
+     * @param left         Requested left drive command, from -1 to 1
+     * @param right        Requested right drive command, from -1 to 1
+     */
+    public void tankDrive(double left, double right) {
+        left = limit(left);
+        left = applyDeadband(left, DRIVE_STICK_DEADBAND);
+
+        right = limit(right);
+        right = applyDeadband(right, DRIVE_STICK_DEADBAND);
+
+        /*if (squareInputs) {
+            left = Math.copySign(left * left, left);
+            right = Math.copySign(right * right, right);
+        }*/
+
+        if (isPIDEnabled()) {
+            velocityControl(left, right);
+        } else {
+            leftDrive.set(left);
+            rightDrive.set(right);
+        }
 
         runAutoShift();
     }
 
-    public void tankDrive(double left, double right) {
-        if (isPIDEnabled()) {
-            if (Math.abs(left) > DRIVE_STICK_SHIFT_POINT) {
-                left = (left * HIGH_GEAR_DRIVE_STICK_COEFFICIENT) - Math.copySign(HIGH_GEAR_DRIVE_STICK_OFFSET, left);
+    /**
+     * @param move         Requested move command, from -1 to 1
+     * @param turn         Requested turn command, from -1 to 1
+     */
+    public void arcadeDrive(double move, double turn) {
+        move = limit(move);
+        move = applyDeadband(move, DRIVE_STICK_DEADBAND);
 
-            } else if (Math.abs(left) > DRIVE_STICK_DEADBAND) {
-                left = (left * LOW_GEAR_DRIVE_STICK_COEFFICIENT) - Math.copySign(LOW_GEAR_DRIVE_STICK_OFFSET, left);
+        turn = limit(turn);
+        turn = applyDeadband(turn, DRIVE_WHEEL_DEADBAND);
 
+        /*if (squareInputs) {
+            move = Math.copySign(move * move, move);
+            turn = Math.copySign(turn * turn, turn);
+        }*/
+
+        double left;
+        double right;
+
+        var maxInput = Math.copySign(Math.max(Math.abs(move), Math.abs(turn)), move);
+
+        if (move >= 0.0) {
+            // First quadrant, else second quadrant
+            if (turn >= 0.0) {
+                left = maxInput;
+                right = move - turn;
             } else {
-                left = 0;
+                left = move + turn;
+                right = maxInput;
             }
-
-            if (Math.abs(right) > DRIVE_STICK_SHIFT_POINT) {
-                right = (right * HIGH_GEAR_DRIVE_STICK_COEFFICIENT) - Math.copySign(HIGH_GEAR_DRIVE_STICK_OFFSET, right);
-
-            } else if (Math.abs(right) > DRIVE_STICK_DEADBAND) {
-                right = (right * LOW_GEAR_DRIVE_STICK_COEFFICIENT) - Math.copySign(LOW_GEAR_DRIVE_STICK_OFFSET, right);
-
-            } else {
-                right = 0;
-            }
-
-            setSetpoints(left, right);
         } else {
-            if (Math.abs(left) < DRIVE_STICK_DEADBAND) left = 0;
-            if (Math.abs(right) < DRIVE_STICK_DEADBAND) right = 0;
+            // Third quadrant, else fourth quadrant
+            if (turn >= 0.0) {
+                left = move + turn;
+                right = maxInput;
+            } else {
+                left = maxInput;
+                right = move - turn;
+            }
+        }
 
+        if (isPIDEnabled()) {
+            velocityControl(left, right);
+        } else {
             leftDrive.set(left);
             rightDrive.set(right);
-
-            runAutoShift();
         }
+
+        runAutoShift();
     }
 
     /**
-     * @param move Requested move command, from -1 to 1
-     * @param turn Requested turn command, from -1 to 1
+     * Limit motor values to the -1.0 to +1.0 range.
      */
-    public void arcadeDrive(double move, double turn) {
-        if (Math.abs(move) < DRIVE_STICK_DEADBAND) move = 0;
-        if (Math.abs(turn) < DRIVE_WHEEL_DEADBAND) turn = 0;
+    private double limit(double value) {
+        if (value > 1.0) {
+            return 1.0;
+        }
+        if (value < -1.0) {
+            return -1.0;
+        }
+        return value;
+    }
 
-        turn *= DRIVE_WHEEL_COEFFICIENT;
-
-        tankDrive(move + turn, move - turn);
+    /**
+     * Returns 0.0 if the given value is within the specified range around zero. The remaining range
+     * between the deadband and 1.0 is scaled from 0.0 to 1.0.
+     *
+     * @param value    value to clip
+     * @param deadband range around zero
+     */
+    private double applyDeadband(double value, double deadband) {
+        if (Math.abs(value) > deadband) {
+            if (value > 0.0) {
+                return (value - deadband) / (1.0 - deadband);
+            } else {
+                return (value + deadband) / (1.0 - deadband);
+            }
+        } else {
+            return 0.0;
+        }
     }
 
     public void disable() {
+        setSetpoints(0, 0);
         setPIDEnabled(false);
+
+        leftController.reset();
+        rightController.reset();
 
         leftDrive.stopMotor();
         rightDrive.stopMotor();

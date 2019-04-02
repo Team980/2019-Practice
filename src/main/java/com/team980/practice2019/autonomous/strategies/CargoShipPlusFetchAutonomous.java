@@ -23,20 +23,20 @@ public final class CargoShipPlusFetchAutonomous extends CommandGroup {
         // Back up away from cargo bay
         addSequential(new EncoderMove(driveSystem, ypr, -1.0));
 
+        // Turn towards hab
+        addSequential(new IMUTurn(driveSystem, ypr, 210.0 * side.invert));
+
         // Move arm to grab hatch
         addSequential(new InstantCommand(() -> {
             robotArm.setSecurityEnabled(true);
             robotArm.setPose(RobotArm.Pose.LOW_ROCKET_HATCH);
         }));
 
-        // Turn towards hab
-        addSequential(new IMUTurn(driveSystem, ypr, 210.0 * side.invert));
-
         // Move to line up with loading station
-        addSequential(new EncoderMove(driveSystem, ypr, 17.0));
+        //addSequential(new EncoderMove(driveSystem, ypr, 17.0));
 
         // Turn to face loading station
-        addSequential(new IMUTurn(driveSystem, ypr, 180.0 * side.invert));
+        //addSequential(new IMUTurn(driveSystem, ypr, 180.0 * side.invert));
 
         // Use Pixy to reach loading station
         //addSequential(new VisionTrack(driveSystem, rioduino, AUTO_FRONT_TRACKING_SPEED, AUTO_LOADING_STATION_TARGET_SCORING_WIDTH));

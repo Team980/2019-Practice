@@ -271,8 +271,8 @@ public class RobotArm {
     public enum Pose {
         STOWED(-1, 42, 310),
 
-        MID_ROCKET_HATCH(-1, 48, 224),
-        MID_ROCKET_CARGO(-1, 42, 151),
+        MID_ROCKET_HATCH(-1, 48, 234),
+        MID_ROCKET_CARGO(-1, 41, 160),
 
         LOW_ROCKET_HATCH(-1, 116, 299),
         LOW_ROCKET_CARGO(-1, 75, 136),

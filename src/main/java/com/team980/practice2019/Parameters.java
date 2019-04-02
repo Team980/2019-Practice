@@ -89,17 +89,15 @@ public final class Parameters {
     public static final double DRIVE_STICK_DEADBAND = 0.1;
     public static final double DRIVE_STICK_SHIFT_POINT = 0.5;
 
-    public static final double LOW_GEAR_DRIVE_STICK_COEFFICIENT = 10.625;
-    public static final double LOW_GEAR_DRIVE_STICK_OFFSET = 1.0625;
+    public static final double LOW_GEAR_DRIVE_STICK_COEFFICIENT = 8.5;
 
     public static final double HIGH_GEAR_DRIVE_STICK_COEFFICIENT = 25.5;
     public static final double HIGH_GEAR_DRIVE_STICK_OFFSET = 8.5;
 
-    public static final double DRIVE_WHEEL_DEADBAND = 0.1;
-    public static final double DRIVE_WHEEL_COEFFICIENT = 0.30;
+    public static final double DRIVE_WHEEL_DEADBAND = 0.05;
 
     // DRIVE SYSTEM: SHIFTERS
-    public static final int SHIFTER_SOLENOID_PCM_CHANNEL = 5; //Easier to reach
+    public static final int SHIFTER_SOLENOID_PCM_CHANNEL = 5; // Easier to reach
 
     public static final double DRIVE_SHIFT_UP_POINT = 4.5; // in ft/sec
     public static final double DRIVE_SHIFT_DOWN_POINT = 4.0; // in ft/sec
@@ -149,7 +147,7 @@ public final class Parameters {
 
     // END EFFECTOR
     public static final int INTAKE_CONTROLLER_CAN_ID = 15;
-    public static final int HATCH_GRABBER_SOLENOID_PCM_CHANNEL = 1;
+    public static final int HATCH_GRABBER_SOLENOID_PCM_CHANNEL = 7; // Also easier to reach
 
     public static final int INTAKE_DIRECTION_INVERT = 1;
 
