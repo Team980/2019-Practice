@@ -78,6 +78,7 @@ public class BackCameraProcessor implements VisionDataProvider {
         return "roboRIO-API";
     }
 
+    @Override
     public double getTargetCenterCoord() {
         return targetCenterCoord;
     }
@@ -87,6 +88,7 @@ public class BackCameraProcessor implements VisionDataProvider {
         return targetCenterCoord - 160 - 25; //Configure if we resurrect back pixy
     }
 
+    @Override
     public double getTargetWidth() {
         return targetWidth;
     }
