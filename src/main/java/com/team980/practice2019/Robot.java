@@ -252,7 +252,7 @@ public final class Robot extends TimedRobot {
         // Robot drive - handles all override moves
         if (tipProtectionEnabled) { // Tipping protection overrides driver input
             autoTargetEnabled = false;
-            driveSystem.arcadeDrive(Math.copySign(3.0, ypr[1]), 0); //TODO tune this if we need it
+            driveSystem.setSetpoints(Math.copySign(3.0, ypr[1]), Math.copySign(3.0, ypr[1])); //TODO tune this if we need it
         } else if (autoTargetEnabled) {
             var driveSpeed = 1.0; //in ft/sec
             var turnSpeed = rioduino.getTargetCenterOffset() / AUTO_VISION_CORRECTION_DIVISOR;
@@ -269,7 +269,7 @@ public final class Robot extends TimedRobot {
 
             driveSystem.setSetpoints(driveSpeed + turnSpeed, driveSpeed - turnSpeed);
         } else {
-            driveSystem.arcadeDrive(-driveStick.getY(), driveWheel.getX());
+            driveSystem.arcadeDrive(-driveStick.getY(), driveWheel.getX(), true);
         }
 
         // Auto target activation

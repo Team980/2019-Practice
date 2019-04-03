@@ -104,7 +104,7 @@ public final class DriveSystem {
     }
 
     /**
-     * Separated so it can run in both auto and teleop (not that we're even doing that right now!)
+     * Separated so it can run in all control modes
      */
     private void runAutoShift() {
         if (isAutoShiftEnabled) {
@@ -129,46 +129,30 @@ public final class DriveSystem {
     public void setSetpoints(double left, double right) {
         leftController.setSetpoint(left);
         rightController.setSetpoint(right);
-    }
 
-    /**
-     * @param left Requested left drive command, from -1 to 1
-     * @param right Requested right drive command, from -1 to 1
-     */
-    private void velocityControl(double left, double right) {
-        if (Math.abs(left) > DRIVE_STICK_SHIFT_POINT) {
-            left = (left * HIGH_GEAR_DRIVE_STICK_COEFFICIENT) - Math.copySign(HIGH_GEAR_DRIVE_STICK_OFFSET, left);
-        } else {
-            left *= LOW_GEAR_DRIVE_STICK_COEFFICIENT;
-        }
-
-        if (Math.abs(right) > DRIVE_STICK_SHIFT_POINT) {
-            right = (right * HIGH_GEAR_DRIVE_STICK_COEFFICIENT) - Math.copySign(HIGH_GEAR_DRIVE_STICK_OFFSET, right);
-        } else {
-            right *= LOW_GEAR_DRIVE_STICK_COEFFICIENT;
-        }
-
-        setSetpoints(left, right);
+        runAutoShift();
     }
 
     /**
      * @param left         Requested left drive command, from -1 to 1
      * @param right        Requested right drive command, from -1 to 1
+     * @param squareInputs If set, decreases the input sensitivity at low speeds.
      */
-    public void tankDrive(double left, double right) {
+    public void tankDrive(double left, double right, boolean squareInputs) {
         left = limit(left);
         left = applyDeadband(left, DRIVE_STICK_DEADBAND);
 
         right = limit(right);
         right = applyDeadband(right, DRIVE_STICK_DEADBAND);
 
-        /*if (squareInputs) {
+        if (squareInputs) {
             left = Math.copySign(left * left, left);
             right = Math.copySign(right * right, right);
-        }*/
+        }
 
         if (isPIDEnabled()) {
-            velocityControl(left, right);
+            leftController.setSetpoint(left * MAX_DRIVE_SPEED);
+            rightController.setSetpoint(right * MAX_DRIVE_SPEED);
         } else {
             leftDrive.set(left);
             rightDrive.set(right);
@@ -180,18 +164,19 @@ public final class DriveSystem {
     /**
      * @param move         Requested move command, from -1 to 1
      * @param turn         Requested turn command, from -1 to 1
+     * @param squareInputs If set, decreases the input sensitivity at low speeds.
      */
-    public void arcadeDrive(double move, double turn) {
+    public void arcadeDrive(double move, double turn, boolean squareInputs) {
         move = limit(move);
         move = applyDeadband(move, DRIVE_STICK_DEADBAND);
 
         turn = limit(turn);
         turn = applyDeadband(turn, DRIVE_WHEEL_DEADBAND);
 
-        /*if (squareInputs) {
+        if (squareInputs) {
             move = Math.copySign(move * move, move);
             turn = Math.copySign(turn * turn, turn);
-        }*/
+        }
 
         double left;
         double right;
@@ -219,7 +204,8 @@ public final class DriveSystem {
         }
 
         if (isPIDEnabled()) {
-            velocityControl(left, right);
+            leftController.setSetpoint(left * MAX_DRIVE_SPEED);
+            rightController.setSetpoint(right * MAX_DRIVE_SPEED);
         } else {
             leftDrive.set(left);
             rightDrive.set(right);
